@@ -12,24 +12,26 @@ namespace Battleship_DataLayer
     using System;
     using System.Collections.Generic;
     
-    public partial class Players
+    public partial class Games
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Players()
+        public Games()
         {
-            this.Games = new HashSet<Games>();
-            this.Games1 = new HashSet<Games>();
+            this.Attacks = new HashSet<Attacks>();
             this.GameShipConfigurations = new HashSet<GameShipConfigurations>();
         }
     
-        public string Username { get; set; }
-        public string Password { get; set; }
+        public int ID { get; set; }
+        public string Title { get; set; }
+        public string CreatorFK { get; set; }
+        public string OpponentFK { get; set; }
+        public bool Complete { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Games> Games { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Games> Games1 { get; set; }
+        public virtual ICollection<Attacks> Attacks { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GameShipConfigurations> GameShipConfigurations { get; set; }
+        public virtual Players Players { get; set; }
+        public virtual Players Players1 { get; set; }
     }
 }

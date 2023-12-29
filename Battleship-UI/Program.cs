@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Battleship_PresentationLayer;
 
 namespace Battleship_UI
 {
@@ -10,6 +11,7 @@ namespace Battleship_UI
     {
         static void Main(string[] args)
         {
+            Presentation pt = new Presentation();
         }
     }
 }

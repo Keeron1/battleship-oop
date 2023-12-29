@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Battleship_PresentationLayer
+namespace Battleship_BusinessLayer
 {
-    public class Class1
+    public class Business
     {
     }
 }

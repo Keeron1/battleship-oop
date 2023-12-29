@@ -25,6 +25,10 @@ namespace Battleship_DataLayer
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<Attacks> Attacks { get; set; }
+        public virtual DbSet<Games> Games { get; set; }
+        public virtual DbSet<GameShipConfigurations> GameShipConfigurations { get; set; }
         public virtual DbSet<Players> Players { get; set; }
+        public virtual DbSet<Ships> Ships { get; set; }
     }
 }
