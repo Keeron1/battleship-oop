@@ -47,7 +47,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <ProjectReference Include="..\Battleship-PresentationLayer\Battleship-PresentationLayer.csproj">
+      <Project>{F6EF7678-8E6F-4627-94D6-64CE7807457A}</Project>
+      <Name>Battleship-PresentationLayer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

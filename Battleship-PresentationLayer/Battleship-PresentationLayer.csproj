@@ -44,5 +44,15 @@
     <Compile Include="Presentation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Battleship-BusinessLayer\Battleship-BusinessLayer.csproj">
+      <Project>{549456EB-F35C-4BE9-8CCE-A50F032C1804}</Project>
+      <Name>Battleship-BusinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Battleship-DataLayer\Battleship-DataLayer.csproj">
+      <Project>{4177A00D-5CFB-4C0B-ACF0-03096263F771}</Project>
+      <Name>Battleship-DataLayer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
