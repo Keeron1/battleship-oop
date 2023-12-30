@@ -27,10 +27,12 @@ namespace Battleship_PresentationLayer
             //check database to see if already exists
 
             myDisplayResult = business.CheckUsernameExists(username);
+
             foreach(Players p in myDisplayResult)
             {
                 Console.WriteLine(p.Username,p.Password);
             }
+
             //Console.WriteLine(myDisplayResult);
 
             //if (username == null) //username already exists

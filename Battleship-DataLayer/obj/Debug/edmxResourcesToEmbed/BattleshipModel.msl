@@ -2,7 +2,7 @@
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="BattleshipDatabaseModelStoreContainer" CdmEntityContainer="BattleshipDatabaseEntities">
     <EntitySetMapping Name="Attacks">
-      <EntityTypeMapping TypeName="BattleshipDatabaseModel.Attacks">
+      <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Attacks)">
         <MappingFragment StoreEntitySet="Attacks">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />
@@ -12,7 +12,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Games">
-      <EntityTypeMapping TypeName="BattleshipDatabaseModel.Games">
+      <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Games)">
         <MappingFragment StoreEntitySet="Games">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Title" ColumnName="Title" />
@@ -23,7 +23,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="GameShipConfigurations">
-      <EntityTypeMapping TypeName="BattleshipDatabaseModel.GameShipConfigurations">
+      <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.GameShipConfigurations)">
         <MappingFragment StoreEntitySet="GameShipConfigurations">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
@@ -33,7 +33,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Players">
-      <EntityTypeMapping TypeName="BattleshipDatabaseModel.Players">
+      <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Players)">
         <MappingFragment StoreEntitySet="Players">
           <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="Password" ColumnName="Password" />
@@ -41,7 +41,7 @@
       </EntityTypeMapping>
     </EntitySetMapping>
     <EntitySetMapping Name="Ships">
-      <EntityTypeMapping TypeName="BattleshipDatabaseModel.Ships">
+      <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Ships)">
         <MappingFragment StoreEntitySet="Ships">
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Title" ColumnName="Title" />

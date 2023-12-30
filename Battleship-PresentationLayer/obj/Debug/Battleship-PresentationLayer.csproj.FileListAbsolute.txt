@@ -5,10 +5,10 @@ E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\Battleship
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\EntityFramework.dll
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\Battleship-BusinessLayer.pdb
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\Battleship-DataLayer.pdb
-E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\Battleship-DataLayer.dll.config
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\EntityFramework.xml
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\obj\Debug\Battleship-PresentationLayer.csproj.AssemblyReference.cache
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\obj\Debug\Battleship-PresentationLayer.csproj.CoreCompileInputs.cache
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\obj\Debug\Battleship-PresentationLayer.csproj.CopyComplete
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\obj\Debug\Battleship-PresentationLayer.dll
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\obj\Debug\Battleship-PresentationLayer.pdb
+E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Debug\Battleship-DataLayer.dll.config

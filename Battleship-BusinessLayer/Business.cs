@@ -10,7 +10,10 @@ namespace Battleship_BusinessLayer
     public class Business
     {
         private Data dt = new Data();
-        public Business() { }
+        public Business() 
+        {
+
+        }
 
         public IQueryable<Players> CheckUsernameExists(string username) 
         {

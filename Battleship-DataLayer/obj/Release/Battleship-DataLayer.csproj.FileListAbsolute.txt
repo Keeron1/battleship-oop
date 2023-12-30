@@ -1,0 +1,12 @@
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\Battleship-DataLayer.dll.config
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\Battleship-DataLayer.dll
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\Battleship-DataLayer.pdb
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\EntityFramework.dll
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\EntityFramework.SqlServer.dll
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\EntityFramework.xml
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Release\EntityFramework.SqlServer.xml
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.csproj.AssemblyReference.cache
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.csproj.CoreCompileInputs.cache
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.csproj.CopyComplete
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.dll
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.pdb

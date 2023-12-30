@@ -1,4 +1,3 @@
-E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Debug\Battleship-DataLayer.dll.config
 E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Debug\Battleship-DataLayer.dll
 E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Debug\Battleship-DataLayer.pdb
 E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Debug\EntityFramework.dll
@@ -10,3 +9,4 @@ E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Debug\Battleship-DataLay
 E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Debug\Battleship-DataLayer.csproj.CopyComplete
 E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Debug\Battleship-DataLayer.dll
 E:\Github\battleship-mcast-oop\Battleship-DataLayer\obj\Debug\Battleship-DataLayer.pdb
+E:\Github\battleship-mcast-oop\Battleship-DataLayer\bin\Debug\Battleship-DataLayer.dll.config

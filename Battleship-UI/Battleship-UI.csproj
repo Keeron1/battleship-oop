@@ -47,10 +47,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Battleship-DataLayer\Battleship-DataLayer.csproj">
+      <Project>{4177a00d-5cfb-4c0b-acf0-03096263f771}</Project>
+      <Name>Battleship-DataLayer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Battleship-PresentationLayer\Battleship-PresentationLayer.csproj">
       <Project>{F6EF7678-8E6F-4627-94D6-64CE7807457A}</Project>
       <Name>Battleship-PresentationLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
