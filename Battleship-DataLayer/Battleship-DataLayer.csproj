@@ -54,19 +54,19 @@
       <DependentUpon>BattleshipModel.tt</DependentUpon>
     </Compile>
     <Compile Include="BattleshipModel.Context.cs">
+      <DependentUpon>BattleshipModel.Context.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BattleshipModel.Context.tt</DependentUpon>
     </Compile>
     <Compile Include="BattleshipModel.cs">
+      <DependentUpon>BattleshipModel.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BattleshipModel.tt</DependentUpon>
     </Compile>
     <Compile Include="BattleshipModel.Designer.cs">
+      <DependentUpon>BattleshipModel.edmx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BattleshipModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="Data.cs" />
     <Compile Include="Games.cs">
@@ -84,17 +84,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
     <EntityDeploy Include="BattleshipModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>BattleshipModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
-    <None Include="BattleshipModel.edmx.diagram">
-      <DependentUpon>BattleshipModel.edmx</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BattleshipModel.Context.tt">
@@ -107,6 +103,11 @@
       <DependentUpon>BattleshipModel.edmx</DependentUpon>
       <LastGenOutput>BattleshipModel.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BattleshipModel.edmx.diagram">
+      <DependentUpon>BattleshipModel.edmx</DependentUpon>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

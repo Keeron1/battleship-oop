@@ -28,9 +28,9 @@ namespace Battleship_PresentationLayer
 
             myDisplayResult = business.CheckUsernameExists(username);
 
-            foreach(Players p in myDisplayResult)
+            foreach (Players p in myDisplayResult)
             {
-                Console.WriteLine(p.Username,p.Password);
+                Console.WriteLine(p.Username, p.Password);
             }
 
             //Console.WriteLine(myDisplayResult);
@@ -50,6 +50,13 @@ namespace Battleship_PresentationLayer
 
             //}
 
+        }
+
+        public void ConfigShipsUi()
+        {
+            Console.Clear();
+
+            Console.WriteLine("");
         }
 
         //Will repeatedly display the menu to the user, until they choose the quit option

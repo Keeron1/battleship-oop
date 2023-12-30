@@ -13,31 +13,40 @@ namespace Battleship_UI
     {
         /*
          * Presentation layer: code for console application
-         * Business Layer: LINQ code must be contained in this layer
-         * Data Layer: Database
+         * Business Layer: Communication between both layers
+         * Data Layer: Database & LINQ CODE
          */
 
         static void Main(string[] args)
         {
             Presentation pt = new Presentation();
-            //pt.Menu();
 
-            char[] chars = { 'A', 'B', 'C', 'D','E','F','G','H' };
-            Console.WriteLine("  | 1 2 3 4 5 6 7 8");
-            Console.WriteLine("--|----------------");
-            for (int col = 0; col < 8; col++)
-            {
-                Console.Write(chars[col] + " | ");
+            pt.Menu();
 
-                for (int row = 0; row < 8; row++)
-                {
-                    Console.Write("y ");
-                }
+            //char[] chars = { 'A', 'B', 'C', 'D','E','F','G','H' }; //starts from 0
+            //Console.WriteLine("  | 1 2 3 4 5 6 7 8");
+            //Console.WriteLine("--|----------------");
+            //for (int col = 1; col < 9; col++)
+            //{
+            //    Console.Write(chars[col-1] + " | ");
 
-                Console.WriteLine();
-            }
-            Console.ReadKey();
+            //    for (int row = 1; row < 9; row++)
+            //    {
+            //        if (col==2 && row == 2)
+            //        {
+            //            Console.Write("L ");
+            //        }
+            //        else
+            //        {
+            //            Console.Write("y ");
+            //        }
 
+            //    }
+
+            //    Console.WriteLine();
+            //}
+            //Console.ReadKey();
         }
+
     }
 }

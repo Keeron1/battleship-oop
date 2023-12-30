@@ -1,9 +1,7 @@
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\Battleship-BusinessLayer.dll
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\Battleship-BusinessLayer.pdb
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\Battleship-DataLayer.dll
-E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\EntityFramework.dll
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\Battleship-DataLayer.pdb
-E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\Battleship-DataLayer.dll.config
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\bin\Release\EntityFramework.xml
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\obj\Release\Battleship-BusinessLayer.csproj.AssemblyReference.cache
 E:\Github\battleship-mcast-oop\Battleship-BusinessLayer\obj\Release\Battleship-BusinessLayer.csproj.CoreCompileInputs.cache
