@@ -10,18 +10,32 @@ namespace Battleship_BusinessLayer
     public class Business
     {
         private Data dt = new Data();
-        public Business() 
+        public Business()
         {
 
         }
 
-        public IQueryable<Players> CheckUsernameExists(string username) 
+        public bool CheckUsernameExists(string username)
         {
-            //if (dt.UsernameExists(username))
-            //{
-            //    return true;
-            //}
-            return dt.UsernameExists(username);
+            if (dt.UsernameExists(username).Count() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool CheckUserPassword(string password)
+        {
+            if (dt.ValidUserPassword(password).Count() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public void CreateNewPlayer(string username, string password)
+        {
+            dt.CreateNewPlayer(username, password);
         }
     }
 }
