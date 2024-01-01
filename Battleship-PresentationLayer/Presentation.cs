@@ -70,6 +70,7 @@ namespace Battleship_PresentationLayer
             }
         }
 
+        //menu 1
         public void AddPlrsDtlsUI()
         {
             for (int i = 1; i < 3; i++) //will loop twice to get player information
@@ -108,13 +109,14 @@ namespace Battleship_PresentationLayer
             }
         }
 
+        //menu 2
         public void ConfigShipsUI()
         {
             //add loop allow both players to set their ships position
             //add inf loop that once all ships have been placed, it will ask the user if they are happy with their ship positioning
             Console.Clear();
             string shipno, shipCoord, temp;
-            int shipId, shipSize;
+            int shipId, shipSize = 0;
             bool horizontal = false;
 
             PrintGrid();
@@ -155,7 +157,7 @@ namespace Battleship_PresentationLayer
             do
             {
                 Console.WriteLine("Would you like to place the ship horizontally or vertically? (h/v)");
-                temp = Console.ReadLine();
+                temp = Console.ReadLine().ToLower();
                 if (temp == "h")
                 {
                     horizontal = true;
@@ -184,24 +186,50 @@ namespace Battleship_PresentationLayer
 
             Console.WriteLine("Select coordinate to place:");
             shipCoord = Console.ReadLine().ToUpper(); //A1 - G8
+            int tempShipSize = 0;
+            bool shipSuccessfullyPlaced = false;
 
-            //check if it there is enough space for selected ship
-            foreach (char c in GridYaxis)
+            for (int c=0; c<GridYaxis.Length; c++)
             {
                 for (int i = 1; i < 9; i++)
                 {
-                    Console.WriteLine(c.ToString() + i);
-                    if (shipCoord == c.ToString() + i)
-                    {//checks if the grid selected is empty
-                        Console.WriteLine("Position good!");
-                        return; //used to break from the for loop
+                    if (tempShipSize < shipSize) //checking if the whole ship size hasn't been confirmed to fit
+                    {
+                        if (shipCoord == GridYaxis[c].ToString() + i) //checks if the position selected is real
+                        {
+                            //add check to see if there is a ship already there
+
+                            tempShipSize++;
+
+                            if (horizontal) //horizontal starts counting from the left
+                            {
+                                shipCoord = GridYaxis[c].ToString() + (i + 1); //sets the next ship coordinate that needs checking
+                            }
+                            else //vertical starts counting from the top
+                            {
+                                shipCoord = GridYaxis[c+1].ToString() + i;
+                            }
+                        }
+                    }
+
+                    if (tempShipSize == shipSize) //checking if ship is confirmed to fit on the grid
+                    {
+                        shipSuccessfullyPlaced = true;
+                        Console.WriteLine("Ship has been placed!");
+                        //add query to set ship position
+                        return;
                     }
                 }
             }
 
+            if(!shipSuccessfullyPlaced)
+            {
+                Console.WriteLine("Incorrect position!");
+            }
+
         }
 
-        //Will repeatedly display the menu to the user, until they choose the quit option
+        //Will repeatedly display the menu to the user, until they select the quit option
         public void Menu()
         {
             int choice = 0;
@@ -241,9 +269,8 @@ namespace Battleship_PresentationLayer
                     Console.WriteLine($"Error: {ex.Message}");
                     Console.ReadKey();
                 }
-
-
             }
         }
+
     }
 }
