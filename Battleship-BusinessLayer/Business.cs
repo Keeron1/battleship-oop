@@ -37,5 +37,11 @@ namespace Battleship_BusinessLayer
         {
             dt.CreateNewPlayer(username, password);
         }
+
+        public IQueryable<Ships> GetShips()
+        {
+            return dt.GetShips();
+        }
+
     }
 }

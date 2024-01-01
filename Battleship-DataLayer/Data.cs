@@ -35,6 +35,12 @@ namespace Battleship_DataLayer
             db.SaveChanges();
         }
 
+        public IQueryable<Ships> GetShips()
+        {
+            var result = from ship in db.Ships select ship;
+            return result;
+        }
+
     }
 
     partial class Players
