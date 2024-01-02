@@ -25,6 +25,7 @@ namespace Battleship_UI
             Presentation pt = new Presentation();
 
             pt.Menu();
+
         }
 
     }

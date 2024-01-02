@@ -13,11 +13,45 @@ namespace Battleship_PresentationLayer
     {
         private Business business = new Business();
         private IQueryable<Ships> GameShips { get; set; }
-        char[] GridYaxis = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
+        private char[] GridYaxis = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
+        private bool[] menuOptsEnabled = { true, true, true };
+
+        private List<Players> players { get; set; } = new List<Players>(2);
 
         public Presentation()
         {
 
+        }
+
+        private string CreateTitle()
+        {
+            string title = "";
+            int matchNo = 0;
+            for (int i = 0; i<players.Count(); i++)
+            {
+                if (i == 1)
+                {
+                    title += " VS ";
+                }
+
+                if (players[i].Username.Length >= 3)
+                {
+                    title += players[i].Username.Substring(0, 3);
+                }
+                else
+                {
+                    title += players[i].Username;
+                }
+            }
+
+            string tempTitle;
+            do
+            {
+                tempTitle = title;
+                matchNo++;
+                tempTitle += " " + matchNo;
+            } while (business.ValidTitle(tempTitle));
+            return tempTitle;
         }
 
         private string MaskPassword()
@@ -48,6 +82,32 @@ namespace Battleship_PresentationLayer
             return pass;
         }
 
+        private bool AskHorizontal()
+        {
+            bool positionSelected = false;
+            bool horizontal = false;
+            do
+            {
+                Console.WriteLine("Would you like to place the ship horizontally or vertically? (h/v)");
+                string temp = Console.ReadLine().ToLower();
+                if (temp == "h")
+                {
+                    horizontal = true;
+                    positionSelected = true;
+                }
+                else if (temp == "v")
+                {
+                    horizontal = false;
+                    positionSelected = true;
+                }
+                else
+                {
+                    Console.WriteLine("Incorrect input!");
+                }
+            } while (!positionSelected);
+            return horizontal;
+        }
+
         private void PrintGrid()
         {
             Console.WriteLine("  | 1 2 3 4 5 6 7 8");
@@ -71,8 +131,9 @@ namespace Battleship_PresentationLayer
         }
 
         //menu 1
-        public void AddPlrsDtlsUI()
+        private void AddPlrsDtlsUI()
         {
+            players.Clear(); //clears the players list
             for (int i = 1; i < 3; i++) //will loop twice to get player information
             {
                 Console.Clear();
@@ -92,6 +153,7 @@ namespace Battleship_PresentationLayer
                     if (business.CheckUserPassword(password)) //while loop until user quits or gets correct password?
                     {
                         Console.WriteLine("Logged in");
+                        players.Add(business.GetPlayer(username));
                     }
                     else
                     {
@@ -103,19 +165,42 @@ namespace Battleship_PresentationLayer
                     Console.WriteLine("Username not used");
                     Console.WriteLine("Input password:");
                     password = MaskPassword();
+
                     business.CreateNewPlayer(username, password);
                     Console.WriteLine($"New Player {username} created!");
+                    players.Add(business.GetPlayer(username)); //no need to check for null since we know that the user has just been created
+
                 }
+            }
+
+            //create game
+            if(players.Count == 2)
+            {
+                if (business.AreGamesCompleteUsername(players[0].Username, players[1].Username)) //game is complete so create new game
+                {
+                    business.CreateNewGame(CreateTitle(), players[0].Username, players[1].Username);
+                    Console.WriteLine("Game has been created!");
+                }
+                else
+                {
+                    Console.WriteLine("A game already exists between both players!");
+                    //make option to ask if users would like to start again
+                }
+                menuOptsEnabled[0] = false; //disables the menu option
             }
         }
 
         //menu 2
-        public void ConfigShipsUI()
+        private void ConfigShipsUI()
         {
             //add loop allow both players to set their ships position
             //add inf loop that once all ships have been placed, it will ask the user if they are happy with their ship positioning
             Console.Clear();
-            string shipno, shipCoord, temp;
+
+            //current game between both players
+            Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username);
+
+            string shipno, shipCoord;
             int shipId, shipSize = 0;
             bool horizontal = false;
 
@@ -153,39 +238,13 @@ namespace Battleship_PresentationLayer
                 }
             }while(!shipFound);
 
-            bool positionSelected = false;
-            do
-            {
-                Console.WriteLine("Would you like to place the ship horizontally or vertically? (h/v)");
-                temp = Console.ReadLine().ToLower();
-                if (temp == "h")
-                {
-                    horizontal = true;
-                    positionSelected = true;
-                }
-                else if(temp == "v")
-                {
-                    horizontal = false;
-                    positionSelected = true;
-                }
-                else
-                {
-                    Console.WriteLine("Incorrect input!");
-                }
-            } while (!positionSelected);
-
-            if (horizontal) 
-            {
-                Console.WriteLine("you chose horizontal!"); 
-            }
-            else
-            {
-                Console.WriteLine("You chose vertical!");
-            }
-
+            horizontal = AskHorizontal();
+            if (horizontal) Console.WriteLine("you chose horizontal!");
+            else Console.WriteLine("You chose vertical!");
 
             Console.WriteLine("Select coordinate to place:");
             shipCoord = Console.ReadLine().ToUpper(); //A1 - G8
+            string tempShipCoord = shipCoord;
             int tempShipSize = 0;
             bool shipSuccessfullyPlaced = false;
 
@@ -195,19 +254,20 @@ namespace Battleship_PresentationLayer
                 {
                     if (tempShipSize < shipSize) //checking if the whole ship size hasn't been confirmed to fit
                     {
-                        if (shipCoord == GridYaxis[c].ToString() + i) //checks if the position selected is real
+                        if (tempShipCoord == GridYaxis[c].ToString() + i) //checks if the position selected is real
                         {
                             //add check to see if there is a ship already there
+                            //^ query gameshipconfig, where playerFK
 
                             tempShipSize++;
 
                             if (horizontal) //horizontal starts counting from the left
                             {
-                                shipCoord = GridYaxis[c].ToString() + (i + 1); //sets the next ship coordinate that needs checking
+                                tempShipCoord = GridYaxis[c].ToString() + (i + 1); //sets the next ship coordinate that needs checking
                             }
                             else //vertical starts counting from the top
                             {
-                                shipCoord = GridYaxis[c+1].ToString() + i;
+                                tempShipCoord = GridYaxis[c+1].ToString() + i;
                             }
                         }
                     }
@@ -216,7 +276,8 @@ namespace Battleship_PresentationLayer
                     {
                         shipSuccessfullyPlaced = true;
                         Console.WriteLine("Ship has been placed!");
-                        //add query to set ship position
+
+                        //business.CreateNewShipCoord("plr", 1, shipCoord);
                         return;
                     }
                 }
@@ -229,10 +290,16 @@ namespace Battleship_PresentationLayer
 
         }
 
+        //menu3
+        private void LaunchAttackUI()
+        {
+            Console.WriteLine("Launch Attack");
+        }
+
         //Will repeatedly display the menu to the user, until they select the quit option
         public void Menu()
         {
-            int choice = 0;
+            int choice;
             while (true)
             {
                 try
@@ -243,20 +310,29 @@ namespace Battleship_PresentationLayer
 
                     switch (choice)
                     {
-                        case 1:
-                            Console.WriteLine("Add Player Details");
-                            AddPlrsDtlsUI();
+                        case 1: // Add Player Details
+                            if (menuOptsEnabled[0]) AddPlrsDtlsUI();
+                            else Console.WriteLine("Players have already been selected!");
                             break;
-                        case 2:
-                            Console.WriteLine("Configure Ships");
-                            ConfigShipsUI();
+
+                        case 2: // Configure Ships
+                            if (menuOptsEnabled[1]) ConfigShipsUI();
+                            else if (menuOptsEnabled[0]) Console.WriteLine("Please choose your players first!");
+                            else Console.WriteLine("Ship configurations have been already set!");
                             break;
-                        case 3:
-                            Console.WriteLine("Launch Attack");
+
+                        case 3: // Launch Attack
+                            if (menuOptsEnabled[2]) LaunchAttackUI();
+                            else Console.WriteLine();
                             break;
-                        case 4:
+
+                        case 4: // Quit
                             Console.WriteLine("Goodbye...");
                             Environment.Exit(0);
+                            break;
+                        case 5:
+                            Console.WriteLine("testing: ");
+                            Console.WriteLine(business.IsGameCompleteUsername(players[0].Username, players[1].Username)) ;
                             break;
                         default:
                             Console.WriteLine("Incorrect Input!");
