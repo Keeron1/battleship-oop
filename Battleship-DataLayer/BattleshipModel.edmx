@@ -32,6 +32,7 @@
           <Property Name="PlayerFK" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="GameFk" Type="int" Nullable="false" />
           <Property Name="Coordinate" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="ShipFK" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="Players">
           <Key>
@@ -69,6 +70,18 @@
             </Principal>
             <Dependent Role="GameShipConfigurations">
               <PropertyRef Name="GameFk" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GameShipConfigurations_Ships">
+          <End Role="Ships" Type="Self.Ships" Multiplicity="1" />
+          <End Role="GameShipConfigurations" Type="Self.GameShipConfigurations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ships">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="GameShipConfigurations">
+              <PropertyRef Name="ShipFK" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -122,6 +135,10 @@
             <End Role="Games" EntitySet="Games" />
             <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
           </AssociationSet>
+          <AssociationSet Name="FK_GameShipConfigurations_Ships" Association="Self.FK_GameShipConfigurations_Ships">
+            <End Role="Ships" EntitySet="Ships" />
+            <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
+          </AssociationSet>
           <AssociationSet Name="FK_Players_Games_Creator" Association="Self.FK_Players_Games_Creator">
             <End Role="Players" EntitySet="Players" />
             <End Role="Games" EntitySet="Games" />
@@ -173,6 +190,8 @@
           <Property Name="Coordinate" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Games" Relationship="Self.FK_Games_GameShipConfigurations" FromRole="GameShipConfigurations" ToRole="Games" />
           <NavigationProperty Name="Players" Relationship="Self.FK_Players_GameShipConfigurations" FromRole="GameShipConfigurations" ToRole="Players" />
+          <Property Name="ShipFK" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Ships" Relationship="BattleshipDatabaseModel.FK_GameShipConfigurations_Ships" FromRole="GameShipConfigurations" ToRole="Ships" />
         </EntityType>
         <EntityType Name="Players">
           <Key>
@@ -191,6 +210,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Size" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="GameShipConfigurations" Relationship="BattleshipDatabaseModel.FK_GameShipConfigurations_Ships" FromRole="Ships" ToRole="GameShipConfigurations" />
         </EntityType>
         <Association Name="FK_Games_Attacks">
           <End Role="Games" Type="Self.Games" Multiplicity="1" />
@@ -278,7 +298,23 @@
             <End Role="Players" EntitySet="Players" />
             <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
           </AssociationSet>
+          <AssociationSet Name="FK_GameShipConfigurations_Ships" Association="BattleshipDatabaseModel.FK_GameShipConfigurations_Ships">
+            <End Role="Ships" EntitySet="Ships" />
+            <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_GameShipConfigurations_Ships">
+          <End Type="BattleshipDatabaseModel.Ships" Role="Ships" Multiplicity="1" />
+          <End Type="BattleshipDatabaseModel.GameShipConfigurations" Role="GameShipConfigurations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ships">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="GameShipConfigurations">
+              <PropertyRef Name="ShipFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -309,7 +345,8 @@
     <EntitySetMapping Name="GameShipConfigurations">
       <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.GameShipConfigurations)">
         <MappingFragment StoreEntitySet="GameShipConfigurations">
-          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ShipFK" ColumnName="ShipFK" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
           <ScalarProperty Name="GameFk" ColumnName="GameFk" />
           <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />

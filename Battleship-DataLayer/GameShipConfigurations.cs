@@ -18,8 +18,10 @@ namespace Battleship_DataLayer
         public string PlayerFK { get; set; }
         public int GameFk { get; set; }
         public string Coordinate { get; set; }
+        public int ShipFK { get; set; }
     
         public virtual Games Games { get; set; }
         public virtual Players Players { get; set; }
+        public virtual Ships Ships { get; set; }
     }
 }

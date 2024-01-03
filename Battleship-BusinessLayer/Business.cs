@@ -74,7 +74,7 @@ namespace Battleship_BusinessLayer
             IQueryable<Games> games = dt.GetGameUsername(creatorFK, opponentFK);
             if(games == null)
             {
-                return false;
+                return true;
             }
             else
             {
@@ -114,9 +114,9 @@ namespace Battleship_BusinessLayer
             return dt.GetShips();
         }
 
-        public void CreateNewShipCoord(string playerFK, int gameFK, string coord)
+        public void CreateNewShipCoord(string playerFK, int gameFK, int shipFK, string coord)
         {
-            dt.CreateShipCoord(playerFK, gameFK, coord);
+            dt.CreateShipCoord(playerFK, gameFK, shipFK, coord);
         }
 
     }

@@ -5,16 +5,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="e9a986db8d9e43c696a78274e3da24f1" Name="Diagram1" ZoomLevel="86">
-        <EntityTypeShape EntityType="BattleshipDatabaseModel.Attacks" Width="1.5" PointX="4.625" PointY="4" IsExpanded="true" />
-        <EntityTypeShape EntityType="BattleshipDatabaseModel.Games" Width="1.5" PointX="0.875" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BattleshipDatabaseModel.GameShipConfigurations" Width="1.5" PointX="4.875" PointY="0.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="BattleshipDatabaseModel.Players" Width="1.5" PointX="0.875" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="BattleshipDatabaseModel.Ships" Width="1.5" PointX="7.375" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="BattleshipDatabaseModel.Attacks" Width="1.5" PointX="8.125" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="BattleshipDatabaseModel.Games" Width="1.5" PointX="5.125" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="BattleshipDatabaseModel.GameShipConfigurations" Width="1.5" PointX="5.125" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="BattleshipDatabaseModel.Players" Width="1.5" PointX="1.5" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="BattleshipDatabaseModel.Ships" Width="1.5" PointX="8.25" PointY="1.5" IsExpanded="true" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Games_Attacks" ManuallyRouted="false" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Games_GameShipConfigurations" ManuallyRouted="false" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Players_Games_Creator" ManuallyRouted="false" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Players_Games_Opponent" ManuallyRouted="false" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Players_GameShipConfigurations" ManuallyRouted="false" />
+        <AssociationConnector Association="BattleshipDatabaseModel.FK_GameShipConfigurations_Ships" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

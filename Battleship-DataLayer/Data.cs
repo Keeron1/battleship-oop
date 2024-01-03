@@ -9,7 +9,6 @@ namespace Battleship_DataLayer
 {
     public class Data
     {
-
         private BattleshipDatabaseEntities db = new BattleshipDatabaseEntities();
         public Data()
         {
@@ -65,21 +64,21 @@ namespace Battleship_DataLayer
             return result;
         }
 
-        public IQueryable<Ships> GetShipSize(int id)
+        public IQueryable<Ships> GetShip(int id)
         {
             var result = from ship in db.Ships where ship.ID == id select ship;
             return result;
         }
 
-        public IQueryable<GameShipConfigurations> GetShip(int id)
+        public IQueryable<GameShipConfigurations> GetGameShipCID(int id)
         {
-            var result = "";
+            var result = from ship in db.GameShipConfigurations where ship.ShipFK == id select ship;
             return result;
         }
 
-        public void CreateShipCoord(string playerFK, int gameFK, string coord)
+        public void CreateShipCoord(string playerFK, int gameFK, int shipFK, string coord)
         {
-            GameShipConfigurations gsc = new GameShipConfigurations(playerFK, gameFK, coord);
+            GameShipConfigurations gsc = new GameShipConfigurations(playerFK, gameFK, shipFK, coord);
             db.GameShipConfigurations.Add(gsc);
             db.SaveChanges();
         }
@@ -118,10 +117,11 @@ namespace Battleship_DataLayer
     partial class GameShipConfigurations
     {
         public GameShipConfigurations() { }
-        public GameShipConfigurations(string playerFK, int gameFK, string coord) 
+        public GameShipConfigurations(string playerFK, int gameFK, int shipFK, string coord) 
         {
             this.PlayerFK = playerFK;
-            this.GameFk = gameFK;
+            this.GameFk = gameFK; 
+            this.ShipFK = shipFK;
             this.Coordinate = coord;
         }
     }

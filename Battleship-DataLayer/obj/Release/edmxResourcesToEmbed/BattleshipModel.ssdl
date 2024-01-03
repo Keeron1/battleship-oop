@@ -27,6 +27,7 @@
     <Property Name="PlayerFK" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="GameFk" Type="int" Nullable="false" />
     <Property Name="Coordinate" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="ShipFK" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Players">
     <Key>
@@ -64,6 +65,18 @@
       </Principal>
       <Dependent Role="GameShipConfigurations">
         <PropertyRef Name="GameFk" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GameShipConfigurations_Ships">
+    <End Role="Ships" Type="Self.Ships" Multiplicity="1" />
+    <End Role="GameShipConfigurations" Type="Self.GameShipConfigurations" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Ships">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="GameShipConfigurations">
+        <PropertyRef Name="ShipFK" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -115,6 +128,10 @@
     </AssociationSet>
     <AssociationSet Name="FK_Games_GameShipConfigurations" Association="Self.FK_Games_GameShipConfigurations">
       <End Role="Games" EntitySet="Games" />
+      <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GameShipConfigurations_Ships" Association="Self.FK_GameShipConfigurations_Ships">
+      <End Role="Ships" EntitySet="Ships" />
       <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
     </AssociationSet>
     <AssociationSet Name="FK_Players_Games_Creator" Association="Self.FK_Players_Games_Creator">

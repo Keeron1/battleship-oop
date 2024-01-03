@@ -25,6 +25,7 @@
     <EntitySetMapping Name="GameShipConfigurations">
       <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.GameShipConfigurations)">
         <MappingFragment StoreEntitySet="GameShipConfigurations">
+          <ScalarProperty Name="ShipFK" ColumnName="ShipFK" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
           <ScalarProperty Name="GameFk" ColumnName="GameFk" />
