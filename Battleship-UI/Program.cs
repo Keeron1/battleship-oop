@@ -20,6 +20,10 @@ namespace Battleship_UI
          * Data Layer: Database & LINQ CODE
          */
 
+        /*
+         * TO DO: ADD SHIPFK KEY IN THE GameShipConfigurations table
+         */
+
         static void Main(string[] args)
         {
             Presentation pt = new Presentation();

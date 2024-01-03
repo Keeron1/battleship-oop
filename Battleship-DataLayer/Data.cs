@@ -71,6 +71,12 @@ namespace Battleship_DataLayer
             return result;
         }
 
+        public IQueryable<GameShipConfigurations> GetShip(int id)
+        {
+            var result = "";
+            return result;
+        }
+
         public void CreateShipCoord(string playerFK, int gameFK, string coord)
         {
             GameShipConfigurations gsc = new GameShipConfigurations(playerFK, gameFK, coord);

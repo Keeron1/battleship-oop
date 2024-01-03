@@ -110,6 +110,8 @@ namespace Battleship_PresentationLayer
 
         private void PrintGrid()
         {
+            //query to get the attacks
+            //query to get where the ships are
             Console.WriteLine("  | 1 2 3 4 5 6 7 8");
             Console.WriteLine("--|----------------");
             for (int col = 1; col < 8; col++) //grid is 8 by 7
@@ -169,7 +171,6 @@ namespace Battleship_PresentationLayer
                     business.CreateNewPlayer(username, password);
                     Console.WriteLine($"New Player {username} created!");
                     players.Add(business.GetPlayer(username)); //no need to check for null since we know that the user has just been created
-
                 }
             }
 
@@ -245,6 +246,7 @@ namespace Battleship_PresentationLayer
             Console.WriteLine("Select coordinate to place:");
             shipCoord = Console.ReadLine().ToUpper(); //A1 - G8
             string tempShipCoord = shipCoord;
+            string[] shipCoords = new string[5]; //used to store all the coordinates of the ship that is to be placed
             int tempShipSize = 0;
             bool shipSuccessfullyPlaced = false;
 
@@ -260,7 +262,7 @@ namespace Battleship_PresentationLayer
                             //^ query gameshipconfig, where playerFK
 
                             tempShipSize++;
-
+                            shipCoords.Append(GridYaxis[c].ToString() + i);
                             if (horizontal) //horizontal starts counting from the left
                             {
                                 tempShipCoord = GridYaxis[c].ToString() + (i + 1); //sets the next ship coordinate that needs checking
@@ -276,7 +278,10 @@ namespace Battleship_PresentationLayer
                     {
                         shipSuccessfullyPlaced = true;
                         Console.WriteLine("Ship has been placed!");
-
+                        foreach(string coord in shipCoords)//test
+                        {
+                            Console.WriteLine(coord);
+                        }
                         //business.CreateNewShipCoord("plr", 1, shipCoord);
                         return;
                     }
@@ -323,7 +328,8 @@ namespace Battleship_PresentationLayer
 
                         case 3: // Launch Attack
                             if (menuOptsEnabled[2]) LaunchAttackUI();
-                            else Console.WriteLine();
+                            else if (menuOptsEnabled[0]) Console.WriteLine("Please choose your players first!");
+                            else if (menuOptsEnabled[1]) Console.WriteLine("Please set the ship positions first!");
                             break;
 
                         case 4: // Quit
@@ -332,7 +338,7 @@ namespace Battleship_PresentationLayer
                             break;
                         case 5:
                             Console.WriteLine("testing: ");
-                            Console.WriteLine(business.IsGameCompleteUsername(players[0].Username, players[1].Username)) ;
+                            Console.WriteLine(business.AreGamesCompleteUsername(players[0].Username, players[1].Username)) ;
                             break;
                         default:
                             Console.WriteLine("Incorrect Input!");
