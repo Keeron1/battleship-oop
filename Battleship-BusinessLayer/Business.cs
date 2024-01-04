@@ -119,5 +119,24 @@ namespace Battleship_BusinessLayer
             dt.CreateShipCoord(playerFK, gameFK, shipFK, coord);
         }
 
+        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK)
+        {
+            IQueryable<GameShipConfigurations> gsc = dt.GetGameShipConfig(gameFK, playerFK);
+            if (gsc != null)
+            {
+                return gsc;
+            }
+            return null;
+        }
+        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK, int shipFk)
+        {
+            IQueryable<GameShipConfigurations> gsc = dt.GetGameShipConfig(gameFK, playerFK, shipFk);
+            if (gsc != null)
+            {
+                return gsc;
+            }
+            return null;
+        }
+
     }
 }

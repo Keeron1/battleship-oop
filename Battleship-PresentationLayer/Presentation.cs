@@ -15,7 +15,7 @@ namespace Battleship_PresentationLayer
         private Business business = new Business();
         private IQueryable<Ships> GameShips { get; set; }
         private char[] GridYaxis = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
-        private bool[] menuOptsEnabled = { true, true, true }; //add players, ship config, attack
+        private bool[] menuOptsEnabled = { true, false, false }; //add players, ship config, attack
 
         private List<Players> players { get; set; } = new List<Players>(2);
 
@@ -83,12 +83,12 @@ namespace Battleship_PresentationLayer
             return pass;
         }
 
-        private Ships AskShipId()
+        private Ships AskUserShipId()
         {
             Ships ship = new Ships();
             bool shipFound = false;
             int shipId;
-            do //add validation later on to see if user has already placed the ship, if they try then allow them to move the position
+            do //add validation later on to see if user has already placed the ship on the grid, if they try then allow them to move the position
             {
                 Console.WriteLine("Select ship no to place:");
                 string shipNoTemp = Console.ReadLine();
@@ -140,70 +140,178 @@ namespace Battleship_PresentationLayer
             return horizontal;
         }
 
-        private void PrintGrid() //still requires work
+        private bool AskPlaceShipCoordPlacement(string pUsername, bool horizontal, Ships ship, int gameID)
         {
-            //query to get the attacks
-            //query to get where the ships are
-            Console.WriteLine("  | 1 2 3 4 5 6 7 8");
-            Console.WriteLine("--|----------------");
-            for (int col = 1; col < 8; col++) //grid is 8 by 7
+            List<string> shipCoords = new List<string>(); //used to store all the coordinates of the ship that is to be placed
+            string shipCoord; //stores the original position the user chose
+
+            Console.Clear();
+            PrintGrid(gameID, pUsername);
+            Console.WriteLine();
+
+            Console.WriteLine($"{pUsername}'s turn:");
+            Console.WriteLine($"Ship selected: {ship.ID} Title: {ship.Title} Size: {ship.Size}");
+            if (horizontal) Console.WriteLine("Placing ship horizontally");
+            else Console.WriteLine("Placing ship vertically");
+            Console.WriteLine();
+            Console.WriteLine("Select coordinate to place:");
+            shipCoord = Console.ReadLine().ToUpper(); //A1 - G8
+
+            int tempShipSize = 0; //used to determine if all ship coords have been found
+
+            for (int c = 0; c < GridYaxis.Length; c++) //grid starts generating from a1 > a2 > a3...
             {
-                Console.Write(GridYaxis[col - 1] + " | ");
-                for (int row = 1; row < 9; row++)
+                for (int r = 1; r < 9; r++)
                 {
-                    if (col == 2 && row == 2)
+                    if (tempShipSize < ship.Size) //checking if the whole ship size hasn't been confirmed to fit
                     {
-                        Console.Write("L ");
+                        if (shipCoord == GridYaxis[c].ToString() + r) //checks if the position selected is a real grid position
+                        {
+                            //checking all the ships
+                            IQueryable gscShips = business.GetGameShipConfig(gameID, pUsername);
+                            if (gscShips != null)
+                            {
+                                foreach (GameShipConfigurations gsc in gscShips)
+                                {
+                                    if (gsc.Coordinate == shipCoord)
+                                    {
+                                        Console.WriteLine("There is a ship already in the position chosen!");
+                                        Console.ReadKey();
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            tempShipSize++;
+                            shipCoords.Add(GridYaxis[c].ToString() + r); //appends the ship coordinate to an array
+
+                            if (horizontal) //horizontal starts counting from the left
+                            {
+                                shipCoord = GridYaxis[c].ToString() + (r + 1); //sets the next ship coordinate that needs checking
+                            }
+                            else //vertical starts counting from the top
+                            {
+                                shipCoord = GridYaxis[c + 1].ToString() + r;
+                            }
+                        }
                     }
-                    else
-                    {
-                        Console.Write("y ");
+                    else if (tempShipSize == ship.Size) //checking if ship is confirmed to fit on the grid
+                    {   //checking if the ship sizes are the same and if the ship hasn't been saved yet
+                        foreach (string coord in shipCoords)
+                        {
+                            business.CreateNewShipCoord(pUsername, gameID, ship.ID, coord);
+                        }
+                        Console.WriteLine("Ship has been placed!");
+                        Console.ReadKey();
+                        return true;
                     }
                 }
-                Console.WriteLine();
+            }
+
+            Console.WriteLine("Incorrect position!");
+            Console.ReadKey();
+            return false;
+        }
+
+        private void PrintGrid(int gameID, string pUsername) //still requires work
+        {
+            if (menuOptsEnabled[1])//display the type of grid with the player's ships
+            {
+                //query to get where the ships are
+
+                IQueryable gscShips = business.GetGameShipConfig(gameID, pUsername);
+
+                Console.WriteLine("  | 1 2 3 4 5 6 7 8");
+                Console.WriteLine("--|----------------");
+                for (int c = 1; c <= GridYaxis.Length; c++) //grid is 8 by 7
+                {
+                    Console.Write(GridYaxis[c-1] + " | ");
+                    for (int r = 1; r < 9; r++)
+                    {
+                        bool foundShipCoord = false;
+                        if (gscShips != null)
+                        {
+                            foreach (GameShipConfigurations gsc in gscShips)
+                            {
+                                if (gsc.Coordinate == GridYaxis[c-1].ToString() + r)
+                                {
+                                    Console.Write("S ");
+                                    foundShipCoord = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        if(!foundShipCoord)
+                        {
+                            Console.Write("G "); // G for grid
+                        }
+                    }
+                    Console.WriteLine(); //moves onto the next row
+                }
+            }
+            else //other only option is attack
+            {
+                //query to get the attacks
             }
         }
 
         //menu 1
-        private void AddPlrsDtlsUI() //still requires little work
+        private void AddPlrsDtlsUI()
         {
             players.Clear(); //clears the players list
             for (int i = 1; i < 3; i++) //will loop twice to get player information
             {
-                Console.Clear();
-                Console.WriteLine($"Input details player {i}:");
-
-                Console.WriteLine("Input Username:");
-                string username = Console.ReadLine();
-                string password;
-
-                if (business.CheckUsernameExists(username)) //username already exists
+                bool playerLoggedIn = false;
+                do
                 {
-                    Console.WriteLine("Username is already used!");
-                    Console.WriteLine($"Login to {username}: ");
-                    Console.WriteLine("Input password:");
-                    password = MaskPassword();
+                    Console.Clear();
+                    Console.WriteLine($"Input details player {i}:");
 
-                    if (business.CheckUserPassword(password)) //while loop until user quits or gets correct password?
+                    Console.WriteLine("Input Username:");
+                    string username = Console.ReadLine();
+                    string password;
+                    if (username == "")
                     {
-                        Console.WriteLine("Logged in");
-                        players.Add(business.GetPlayer(username));
+                        Console.WriteLine("Username is not available!");
+                    }
+                    else if (business.CheckUsernameExists(username)) //username already exists
+                    {
+                        Console.WriteLine("Username is already used!");
+                        Console.WriteLine($"Login to {username}: ");
+                        Console.WriteLine("Input password:");
+                        password = MaskPassword();
+
+                        if (business.CheckUserPassword(password))
+                        {
+                            Console.WriteLine("Logged in");
+                            players.Add(business.GetPlayer(username));
+                            playerLoggedIn = true;
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong password");
+                        }
                     }
                     else
                     {
-                        Console.WriteLine("Wrong password");
+                        Console.WriteLine("Username not used");
+                        Console.WriteLine("Input password:");
+                        password = MaskPassword();
+                        if(password == "")
+                        {
+                            Console.WriteLine("Please create a password!");
+                        }
+                        else
+                        {
+                            business.CreateNewPlayer(username, password);
+                            Console.WriteLine($"New Player {username} created!");
+                            players.Add(business.GetPlayer(username)); //no need to check for null since we know that the user has just been created
+                            playerLoggedIn = true;
+                        }
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Username not used");
-                    Console.WriteLine("Input password:");
-                    password = MaskPassword();
-
-                    business.CreateNewPlayer(username, password);
-                    Console.WriteLine($"New Player {username} created!");
-                    players.Add(business.GetPlayer(username)); //no need to check for null since we know that the user has just been created
-                }
+                    Console.ReadKey();
+                } while (!playerLoggedIn);
             }
 
             //create game
@@ -220,32 +328,26 @@ namespace Battleship_PresentationLayer
                     //make option to ask if users would like to start again
                 }
                 menuOptsEnabled[0] = false; //disables the add players option
+                menuOptsEnabled[1] = true; //disables the add players option
             }
         }
 
         //menu 2
         private void ConfigShipsUI()
         {
-            Console.Clear();
-
-            //current game between both players
-            Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username);
             GameShips = business.GetShips();
+            Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username); //current game between both players
+           //make check to see if ships have already been placed
 
             for (int p=0; p<2; p++)
             {
-                for (int y = 0; y < 5; y++)
+                for (int y = 0; y < 5; y++) //fix this for loop once checking to see which ships have been already placed
                 {
                     Ships ship; //to store the ship chosen by the user
-                    int shipSize; //stores the ship's size
-
                     bool horizontal; //whether the user selected for the ship to be placed horizontally or vertically
 
-                    List<string> shipCoords = new List<string>(); //used to store all the coordinates of the ship that is to be placed
-                    string shipCoord; //stores the original position the user chose
-
                     Console.Clear();
-                    PrintGrid();
+                    PrintGrid(game.ID, players[p].Username);
                     Console.WriteLine();
                     Console.WriteLine($"{players[p].Username}'s turn:");
                     foreach (Ships s in GameShips)
@@ -253,76 +355,22 @@ namespace Battleship_PresentationLayer
                         Console.WriteLine($"Ship: {s.ID} Title: {s.Title} Size: {s.Size} Not Placed");
                     }
 
-                    ship = AskShipId();
-                    shipSize = ship.Size;
+                    ship = AskUserShipId(); //asks the user which ship they would like to select by choosing the ship id
+                    horizontal = AskHorizontal(); //asks the user if they would like to place the ship horizontally or vertically
 
-                    horizontal = AskHorizontal();
                     if (horizontal) Console.WriteLine("you chose horizontal!");
                     else Console.WriteLine("You chose vertical!");
 
                     bool shipSuccessfullyPlaced = false;
                     do //inf loop so that the user can choose a grid position even if they mess up
                     {
-                        Console.Clear();
-                        PrintGrid();
-                        Console.WriteLine();
-
-                        Console.WriteLine($"{players[p].Username}'s turn:");
-                        Console.WriteLine($"Ship selected: {ship.ID} Title: {ship.Title} Size: {ship.Size}");
-                        if(horizontal) Console.WriteLine("Placing ship horizontally");
-                        else Console.WriteLine("Placing ship vertically");
-                        Console.WriteLine();
-                        Console.WriteLine("Select coordinate to place:");
-                        shipCoord = Console.ReadLine().ToUpper(); //A1 - G8
-
-                        int tempShipSize = 0; //used to determine if all ship coords have been found
-                        
-                        for (int c = 0; c < GridYaxis.Length; c++) //grid starts generating from a1 > a2 > a3...
-                        {
-                            for (int i = 1; i < 9; i++)
-                            {
-                                if (tempShipSize < shipSize) //checking if the whole ship size hasn't been confirmed to fit
-                                {
-                                    if (shipCoord == GridYaxis[c].ToString() + i) //checks if the position selected is a real grid position
-                                    {
-                                        //add check to see if there is a ship already there
-                                        //^ query gameshipconfig, where playerFK
-
-                                        tempShipSize++;
-                                        shipCoords.Add(GridYaxis[c].ToString() + i); //appends the ship coordinate to an array
-
-                                        if (horizontal) //horizontal starts counting from the left
-                                        {
-                                            shipCoord = GridYaxis[c].ToString() + (i + 1); //sets the next ship coordinate that needs checking
-                                        }
-                                        else //vertical starts counting from the top
-                                        {
-                                            shipCoord = GridYaxis[c + 1].ToString() + i;
-                                        }
-                                    }
-                                }
-
-                                if (tempShipSize == shipSize && !shipSuccessfullyPlaced) //checking if ship is confirmed to fit on the grid
-                                { //checking if the ship sizes are the same and if the ship hasn't been saved yet
-                                  //need to test return but I think it will quit all loops
-                                    shipSuccessfullyPlaced = true;
-                                    foreach (string coord in shipCoords)
-                                    {   
-                                        business.CreateNewShipCoord(players[p].Username, game.ID, ship.ID, coord);
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!shipSuccessfullyPlaced)
-                        {
-                            Console.WriteLine("Incorrect position!");
-                        }
-                        else Console.WriteLine("Ship has been placed!");
-                        Console.ReadKey();
+                        shipSuccessfullyPlaced = AskPlaceShipCoordPlacement(players[p].Username, horizontal, ship, game.ID);
                     } while (!shipSuccessfullyPlaced);
                 }
+
             }
+            menuOptsEnabled[1] = false; //disables the ship config option
+            menuOptsEnabled[2] = true; //disables the add players option
         }
 
         //menu3
@@ -383,6 +431,5 @@ namespace Battleship_PresentationLayer
                 }
             }
         }
-
     }
 }

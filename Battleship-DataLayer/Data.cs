@@ -64,15 +64,21 @@ namespace Battleship_DataLayer
             return result;
         }
 
-        public IQueryable<Ships> GetShip(int id)
+        public IQueryable<Ships> GetShipsID(int id)
         {
             var result = from ship in db.Ships where ship.ID == id select ship;
             return result;
         }
 
-        public IQueryable<GameShipConfigurations> GetGameShipCID(int id)
+        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK)
         {
-            var result = from ship in db.GameShipConfigurations where ship.ShipFK == id select ship;
+            var result = from ship in db.GameShipConfigurations where ship.GameFk == gameFK && ship.PlayerFK == playerFK select ship;
+            return result;
+        }
+
+        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK, int shipFk)
+        {
+            var result = from ship in db.GameShipConfigurations where ship.GameFk == gameFK && ship.PlayerFK == playerFK && ship.ID == shipFk select ship;
             return result;
         }
 
