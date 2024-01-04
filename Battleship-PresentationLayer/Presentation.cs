@@ -212,7 +212,7 @@ namespace Battleship_PresentationLayer
                 if (business.AreGamesCompleteUsername(players[0].Username, players[1].Username)) //game is complete so create new game
                 {
                     business.CreateNewGame(CreateTitle(), players[0].Username, players[1].Username);
-                    Console.WriteLine("Game has been created!");
+                    Console.WriteLine("A game has been created!");
                 }
                 else
                 {
@@ -302,12 +302,13 @@ namespace Battleship_PresentationLayer
                                     }
                                 }
 
-                                if (tempShipSize == shipSize) //checking if ship is confirmed to fit on the grid
-                                {
+                                if (tempShipSize == shipSize && !shipSuccessfullyPlaced) //checking if ship is confirmed to fit on the grid
+                                { //checking if the ship sizes are the same and if the ship hasn't been saved yet
+                                  //need to test return but I think it will quit all loops
                                     shipSuccessfullyPlaced = true;
                                     foreach (string coord in shipCoords)
-                                    {   //FINISH THIS
-                                        //business.CreateNewShipCoord(plr.Username, game.ID, ship.ID, coord);
+                                    {   
+                                        business.CreateNewShipCoord(players[p].Username, game.ID, ship.ID, coord);
                                     }
                                 }
                             }
