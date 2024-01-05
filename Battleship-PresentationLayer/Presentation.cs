@@ -83,36 +83,43 @@ namespace Battleship_PresentationLayer
             return pass;
         }
 
-        private Ships AskUserShipId()
+        private Ships AskUserShipId(IQueryable<GameShipConfigurations> gscShips)
         {
             Ships ship = new Ships();
             bool shipFound = false;
             int shipId;
-            do //add validation later on to see if user has already placed the ship on the grid, if they try then allow them to move the position
-            {
-                Console.WriteLine("Select ship no to place:");
-                string shipNoTemp = Console.ReadLine();
 
-                //check if valid ship has been selected
-                if (int.TryParse(shipNoTemp, out shipId))
+            Console.WriteLine("Select ship no to place:");
+            string shipNoTemp = Console.ReadLine();
+
+            //check if valid ship has been selected
+            if (int.TryParse(shipNoTemp, out shipId)) //checks if the number is an integer
+            {
+                foreach (Ships s in GameShips) //loops through all the ships to see if it a real ship
                 {
-                    foreach (Ships s in GameShips)
+                    if (s.ID == shipId)
                     {
-                        if (s.ID == shipId)
+                        foreach (GameShipConfigurations gsc in gscShips)
                         {
-                            shipFound = true;
-                            ship = s;
+                            if (gsc.ID == shipId)
+                            {
+                                Console.WriteLine("This ship has already been placed!");
+                                return null;
+                            }
                         }
+                        shipFound = true;
+                        ship = s;
+                        return ship;
                     }
                 }
-                if (!shipFound)
-                {
-                    Console.WriteLine("Please select a ship!");
-                    Console.WriteLine("To select a ship write it's number");
-                }
-            } while (!shipFound);
-            return ship;
-        } //still requires little work
+            }
+            if (!shipFound)
+            {
+                Console.WriteLine("Please select a ship!");
+                Console.WriteLine("To select a ship write it's number");
+            }
+            return null;
+        }
 
         private bool AskHorizontal()
         {
@@ -185,6 +192,7 @@ namespace Battleship_PresentationLayer
                             tempShipSize++;
                             shipCoords.Add(GridYaxis[c].ToString() + r); //appends the ship coordinate to an array
 
+                            //generates the next coordinate to be checked
                             if (horizontal) //horizontal starts counting from the left
                             {
                                 shipCoord = GridYaxis[c].ToString() + (r + 1); //sets the next ship coordinate that needs checking
@@ -337,12 +345,26 @@ namespace Battleship_PresentationLayer
         {
             GameShips = business.GetShips();
             Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username); //current game between both players
-           //make check to see if ships have already been placed
 
             for (int p=0; p<2; p++)
             {
-                for (int y = 0; y < 5; y++) //fix this for loop once checking to see which ships have been already placed
+                int y = 0;
+                IQueryable<GameShipConfigurations> gscShips = business.GetGameShipConfig(game.ID, players[p].Username);
+                if (gscShips != null) //some ships have already been placed
                 {
+                    // and the ship id
+                    if(gscShips.Count() == 5)
+                    {
+                        Console.WriteLine($"Player {players[p].Username} has already placed their ships!");
+                        Console.ReadKey();
+                        continue;
+                    }
+                    y = gscShips.Count();
+                }
+
+                while (y < 5)
+                {
+                    bool placed = false;
                     Ships ship; //to store the ship chosen by the user
                     bool horizontal; //whether the user selected for the ship to be placed horizontally or vertically
 
@@ -352,10 +374,20 @@ namespace Battleship_PresentationLayer
                     Console.WriteLine($"{players[p].Username}'s turn:");
                     foreach (Ships s in GameShips)
                     {
-                        Console.WriteLine($"Ship: {s.ID} Title: {s.Title} Size: {s.Size} Not Placed");
+                        Console.WriteLine($"Ship: {s.ID} Title: {s.Title} Size: {s.Size} Ship placed: {placed}");
                     }
 
-                    ship = AskUserShipId(); //asks the user which ship they would like to select by choosing the ship id
+                    bool shipSuccessfullySelected = false;
+                    do //asks the user which ship they would like to select by choosing the ship id
+                    {
+                        Ships tempShip = AskUserShipId(gscShips);
+                        if (tempShip != null)
+                        {
+                            ship = tempShip;
+                            shipSuccessfullySelected = true;
+                        }
+                    } while (!shipSuccessfullySelected);
+                   
                     horizontal = AskHorizontal(); //asks the user if they would like to place the ship horizontally or vertically
 
                     if (horizontal) Console.WriteLine("you chose horizontal!");
@@ -366,6 +398,7 @@ namespace Battleship_PresentationLayer
                     {
                         shipSuccessfullyPlaced = AskPlaceShipCoordPlacement(players[p].Username, horizontal, ship, game.ID);
                     } while (!shipSuccessfullyPlaced);
+                    y++;
                 }
 
             }
