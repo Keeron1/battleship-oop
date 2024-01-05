@@ -76,9 +76,11 @@ namespace Battleship_DataLayer
             return result;
         }
 
-        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK, int shipFk)
+        public IQueryable<int> GetUniqueGameShips(int gameFK, string playerFK)
         {
-            var result = from ship in db.GameShipConfigurations where ship.GameFk == gameFK && ship.PlayerFK == playerFK && ship.ID == shipFk select ship;
+            var result = (from ship in db.GameShipConfigurations
+                         where ship.GameFk == gameFK && ship.PlayerFK == playerFK
+                         select ship.ShipFK).Distinct();
             return result;
         }
 

@@ -128,14 +128,18 @@ namespace Battleship_BusinessLayer
             }
             return null;
         }
-        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK, int shipFk)
+        public int GetUniqueGameShips(int gameFK, string playerFK)
         {
-            IQueryable<GameShipConfigurations> gsc = dt.GetGameShipConfig(gameFK, playerFK, shipFk);
+            IQueryable<int> gsc = dt.GetUniqueGameShips(gameFK, playerFK).Distinct();
             if (gsc != null)
             {
-                return gsc;
+                foreach(int i in gsc) //running the query
+                {
+                    return gsc.Count();
+                }
+               
             }
-            return null;
+            return 0;
         }
 
     }
