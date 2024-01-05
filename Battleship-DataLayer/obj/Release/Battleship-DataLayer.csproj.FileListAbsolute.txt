@@ -16,3 +16,4 @@ C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-DataLayer\obj\R
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.csproj.CopyComplete
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.dll
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-DataLayer\obj\Release\Battleship-DataLayer.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-DataLayer\bin\Release\Battleship-DataLayer.dll.config

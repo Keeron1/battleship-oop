@@ -20,6 +20,7 @@ namespace Battleship_DataLayer
             this.Games = new HashSet<Games>();
             this.Games1 = new HashSet<Games>();
             this.GameShipConfigurations = new HashSet<GameShipConfigurations>();
+            this.Attacks = new HashSet<Attacks>();
         }
     
         public string Username { get; set; }
@@ -31,5 +32,7 @@ namespace Battleship_DataLayer
         public virtual ICollection<Games> Games1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<GameShipConfigurations> GameShipConfigurations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Attacks> Attacks { get; set; }
     }
 }

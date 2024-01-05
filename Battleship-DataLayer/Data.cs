@@ -91,17 +91,24 @@ namespace Battleship_DataLayer
             db.SaveChanges();
         }
 
-        public void CreateAttack(string coord, bool hit, int gameFK)
+        public void CreateAttack(string coord, bool hit, int gameFK, string playerFK)
         {
-            Attacks atk = new Attacks(coord, hit, gameFK);
+            Attacks atk = new Attacks(coord, hit, gameFK, playerFK);
             db.Attacks.Add(atk);
             db.SaveChanges();
         }
-        public IQueryable<Attacks> GetAttacks(int gameFK, string coord)
+        public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK)
         {
-            var result = from atk in db.Attacks where atk.GameFK == gameFK && atk.Coordinate == coord select atk;
+            var result = from atk in db.Attacks where atk.GameFK == gameFK select atk;
             return result;
         }
+
+        public IQueryable<GameShipConfigurations>GetOpponentShips(int gameFK, string playerFK)
+        {
+            var result = from gsc in db.GameShipConfigurations where gsc.GameFk == gameFK && gsc.PlayerFK != playerFK select gsc;
+            return result;
+        }
+
     }
 
     partial class Players
@@ -148,18 +155,20 @@ namespace Battleship_DataLayer
     partial class Attacks
     {
         public Attacks() { }
-        public Attacks(string Coordinate, bool Hit, int GameFK)
+        public Attacks(string Coordinate, bool Hit, int GameFK, string playerFk)
         {
             this.Coordinate = Coordinate;
             this.Hit = Hit;
             this.GameFK = GameFK;
+            this.PlayerFK = playerFk;
         }
-        public Attacks(int ID,string Coordinate, bool Hit, int GameFK)
+        public Attacks(int ID,string Coordinate, bool Hit, int GameFK, string playerFK)
         {
             this.ID = ID;
             this.Coordinate = Coordinate;
             this.Hit = Hit;
             this.GameFK = GameFK;
+            this.PlayerFK = playerFK;
         }
     }
 }

@@ -18,7 +18,9 @@ namespace Battleship_DataLayer
         public string Coordinate { get; set; }
         public bool Hit { get; set; }
         public int GameFK { get; set; }
+        public string PlayerFK { get; set; }
     
         public virtual Games Games { get; set; }
+        public virtual Players Players { get; set; }
     }
 }

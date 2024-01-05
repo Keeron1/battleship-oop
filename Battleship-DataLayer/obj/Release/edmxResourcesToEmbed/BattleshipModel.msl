@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Attacks">
       <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Attacks)">
         <MappingFragment StoreEntitySet="Attacks">
+          <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />
           <ScalarProperty Name="Hit" ColumnName="Hit" />

@@ -34,3 +34,4 @@ C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-UI\obj\Release\
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-UI\obj\Release\Battleship-UI.csproj.CopyComplete
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-UI\obj\Release\Battleship-UI.exe
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-UI\obj\Release\Battleship-UI.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-UI\bin\Release\Battleship-DataLayer.dll.config

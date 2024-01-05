@@ -13,6 +13,7 @@
           <Property Name="Coordinate" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Hit" Type="bit" Nullable="false" />
           <Property Name="GameFK" Type="int" Nullable="false" />
+          <Property Name="PlayerFK" Type="nvarchar" MaxLength="50" Nullable="false" />
         </EntityType>
         <EntityType Name="Games">
           <Key>
@@ -85,6 +86,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Players_Attacks">
+          <End Role="Players" Type="Self.Players" Multiplicity="1" />
+          <End Role="Attacks" Type="Self.Attacks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="Attacks">
+              <PropertyRef Name="PlayerFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Players_Games_Creator">
           <End Role="Players" Type="Self.Players" Multiplicity="1" />
           <End Role="Games" Type="Self.Games" Multiplicity="*" />
@@ -139,6 +152,10 @@
             <End Role="Ships" EntitySet="Ships" />
             <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
           </AssociationSet>
+          <AssociationSet Name="FK_Players_Attacks" Association="Self.FK_Players_Attacks">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="Attacks" EntitySet="Attacks" />
+          </AssociationSet>
           <AssociationSet Name="FK_Players_Games_Creator" Association="Self.FK_Players_Games_Creator">
             <End Role="Players" EntitySet="Players" />
             <End Role="Games" EntitySet="Games" />
@@ -165,6 +182,8 @@
           <Property Name="Hit" Type="Boolean" Nullable="false" />
           <Property Name="GameFK" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Games" Relationship="Self.FK_Games_Attacks" FromRole="Attacks" ToRole="Games" />
+          <Property Name="PlayerFK" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Players" Relationship="BattleshipDatabaseModel.FK_Players_Attacks" FromRole="Attacks" ToRole="Players" />
         </EntityType>
         <EntityType Name="Games">
           <Key>
@@ -202,6 +221,7 @@
           <NavigationProperty Name="Games" Relationship="Self.FK_Players_Games_Creator" FromRole="Players" ToRole="Games" />
           <NavigationProperty Name="Games1" Relationship="Self.FK_Players_Games_Opponent" FromRole="Players" ToRole="Games" />
           <NavigationProperty Name="GameShipConfigurations" Relationship="Self.FK_Players_GameShipConfigurations" FromRole="Players" ToRole="GameShipConfigurations" />
+          <NavigationProperty Name="Attacks" Relationship="BattleshipDatabaseModel.FK_Players_Attacks" FromRole="Players" ToRole="Attacks" />
         </EntityType>
         <EntityType Name="Ships">
           <Key>
@@ -302,6 +322,10 @@
             <End Role="Ships" EntitySet="Ships" />
             <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
           </AssociationSet>
+          <AssociationSet Name="FK_Players_Attacks" Association="BattleshipDatabaseModel.FK_Players_Attacks">
+            <End Role="Players" EntitySet="Players" />
+            <End Role="Attacks" EntitySet="Attacks" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="FK_GameShipConfigurations_Ships">
           <End Type="BattleshipDatabaseModel.Ships" Role="Ships" Multiplicity="1" />
@@ -315,6 +339,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Players_Attacks">
+          <End Type="BattleshipDatabaseModel.Players" Role="Players" Multiplicity="1" />
+          <End Type="BattleshipDatabaseModel.Attacks" Role="Attacks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Players">
+              <PropertyRef Name="Username" />
+            </Principal>
+            <Dependent Role="Attacks">
+              <PropertyRef Name="PlayerFK" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -324,7 +360,8 @@
     <EntitySetMapping Name="Attacks">
       <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Attacks)">
         <MappingFragment StoreEntitySet="Attacks">
-          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />
           <ScalarProperty Name="Hit" ColumnName="Hit" />
           <ScalarProperty Name="GameFK" ColumnName="GameFK" />

@@ -8,6 +8,7 @@
     <Property Name="Coordinate" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Hit" Type="bit" Nullable="false" />
     <Property Name="GameFK" Type="int" Nullable="false" />
+    <Property Name="PlayerFK" Type="nvarchar" MaxLength="50" Nullable="false" />
   </EntityType>
   <EntityType Name="Games">
     <Key>
@@ -80,6 +81,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Players_Attacks">
+    <End Role="Players" Type="Self.Players" Multiplicity="1" />
+    <End Role="Attacks" Type="Self.Attacks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Players">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Attacks">
+        <PropertyRef Name="PlayerFK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Players_Games_Creator">
     <End Role="Players" Type="Self.Players" Multiplicity="1" />
     <End Role="Games" Type="Self.Games" Multiplicity="*" />
@@ -133,6 +146,10 @@
     <AssociationSet Name="FK_GameShipConfigurations_Ships" Association="Self.FK_GameShipConfigurations_Ships">
       <End Role="Ships" EntitySet="Ships" />
       <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Players_Attacks" Association="Self.FK_Players_Attacks">
+      <End Role="Players" EntitySet="Players" />
+      <End Role="Attacks" EntitySet="Attacks" />
     </AssociationSet>
     <AssociationSet Name="FK_Players_Games_Creator" Association="Self.FK_Players_Games_Creator">
       <End Role="Players" EntitySet="Players" />

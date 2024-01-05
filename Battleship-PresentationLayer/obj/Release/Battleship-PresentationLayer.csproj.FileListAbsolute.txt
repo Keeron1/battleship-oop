@@ -24,3 +24,4 @@ C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLay
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.csproj.CopyComplete
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.dll
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLayer\bin\Release\Battleship-DataLayer.dll.config

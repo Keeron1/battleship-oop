@@ -16,6 +16,7 @@
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Players_Games_Opponent" ManuallyRouted="false" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_Players_GameShipConfigurations" ManuallyRouted="false" />
         <AssociationConnector Association="BattleshipDatabaseModel.FK_GameShipConfigurations_Ships" />
+        <AssociationConnector Association="BattleshipDatabaseModel.FK_Players_Attacks" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

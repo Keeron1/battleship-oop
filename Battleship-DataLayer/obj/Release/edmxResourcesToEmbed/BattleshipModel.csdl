@@ -9,6 +9,8 @@
     <Property Name="Hit" Type="Boolean" Nullable="false" />
     <Property Name="GameFK" Type="Int32" Nullable="false" />
     <NavigationProperty Name="Games" Relationship="Self.FK_Games_Attacks" FromRole="Attacks" ToRole="Games" />
+    <Property Name="PlayerFK" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Players" Relationship="BattleshipDatabaseModel.FK_Players_Attacks" FromRole="Attacks" ToRole="Players" />
   </EntityType>
   <EntityType Name="Games">
     <Key>
@@ -46,6 +48,7 @@
     <NavigationProperty Name="Games" Relationship="Self.FK_Players_Games_Creator" FromRole="Players" ToRole="Games" />
     <NavigationProperty Name="Games1" Relationship="Self.FK_Players_Games_Opponent" FromRole="Players" ToRole="Games" />
     <NavigationProperty Name="GameShipConfigurations" Relationship="Self.FK_Players_GameShipConfigurations" FromRole="Players" ToRole="GameShipConfigurations" />
+    <NavigationProperty Name="Attacks" Relationship="BattleshipDatabaseModel.FK_Players_Attacks" FromRole="Players" ToRole="Attacks" />
   </EntityType>
   <EntityType Name="Ships">
     <Key>
@@ -146,6 +149,10 @@
       <End Role="Ships" EntitySet="Ships" />
       <End Role="GameShipConfigurations" EntitySet="GameShipConfigurations" />
     </AssociationSet>
+    <AssociationSet Name="FK_Players_Attacks" Association="BattleshipDatabaseModel.FK_Players_Attacks">
+      <End Role="Players" EntitySet="Players" />
+      <End Role="Attacks" EntitySet="Attacks" />
+    </AssociationSet>
   </EntityContainer>
   <Association Name="FK_GameShipConfigurations_Ships">
     <End Type="BattleshipDatabaseModel.Ships" Role="Ships" Multiplicity="1" />
@@ -156,6 +163,18 @@
       </Principal>
       <Dependent Role="GameShipConfigurations">
         <PropertyRef Name="ShipFK" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Players_Attacks">
+    <End Type="BattleshipDatabaseModel.Players" Role="Players" Multiplicity="1" />
+    <End Type="BattleshipDatabaseModel.Attacks" Role="Attacks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Players">
+        <PropertyRef Name="Username" />
+      </Principal>
+      <Dependent Role="Attacks">
+        <PropertyRef Name="PlayerFK" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -228,7 +228,7 @@ namespace Battleship_PresentationLayer
             return false;
         }
 
-        private void PrintGrid(int gameID, string pUsername) //still requires work
+        private void PrintGrid(int gameID, string pUsername)
         {
             if (menuOptsEnabled[1])//display the type of grid with the player's ships
             {
@@ -263,9 +263,44 @@ namespace Battleship_PresentationLayer
                     Console.WriteLine(); //moves onto the next row
                 }
             }
-            else //other only option is attack
+            else
             {
-                //query to get the attacks
+                IQueryable<Attacks> atks = business.GetAttacks(gameID, pUsername);
+
+                Console.WriteLine("  | 1 2 3 4 5 6 7 8");
+                Console.WriteLine("--|----------------");
+                for (int c = 1; c <= GridYaxis.Length; c++) //grid is 8 by 7
+                {
+                    Console.Write(GridYaxis[c - 1] + " | ");
+                    for (int r = 1; r < 9; r++)
+                    {
+                        bool foundHitCoord = false;
+                        if(atks != null)
+                        {
+                            foreach(Attacks atk in atks)
+                            {   //searches through the grid to find the same coordinate as the atk coordinate
+                                if(atk.Coordinate == GridYaxis[c - 1].ToString() + r) 
+                                {
+                                    if (atk.Hit) //if the attack was a hit
+                                    {
+                                        Console.Write("X ");
+                                    }
+                                    else
+                                    {
+                                        Console.Write("O ");
+                                    }
+                                    foundHitCoord = true;
+                                }
+                            }
+                        }
+
+                        if (!foundHitCoord) //if coordinate wasn't attacked
+                        {
+                            Console.Write("G "); // G for grid
+                        }
+                    }
+                    Console.WriteLine(); //moves onto the next row
+                }
             }
         }
 
@@ -427,8 +462,43 @@ namespace Battleship_PresentationLayer
         //menu3
         private void LaunchAttackUI()
         {
-            Console.WriteLine("Launch Attack");
+            Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username); //current game between both players
+            do
+            {
+                for (int p=0; p<players.Count(); p++)
+                {
+                    bool attackHit = false;
+                    IQueryable<GameShipConfigurations> opponentShips = business.GetOpponentShips(game.ID, players[p].Username);
 
+                    PrintGrid(game.ID, players[p].Username);
+                    Console.WriteLine();
+                    Console.WriteLine($"{players[p].Username}'s turn:");
+                    Console.WriteLine("Where would you like to attack?");
+                    string userCoord = Console.ReadLine().ToUpper();
+
+                    foreach (GameShipConfigurations opponent in opponentShips)
+                    {//loops through the enemy's ship's coordinates
+                        if (opponent.Coordinate == userCoord)
+                        {
+                            attackHit = true;
+                            Console.WriteLine("Great shot!");
+                            Console.WriteLine($"Ship has been found at {userCoord}");
+                            Console.ReadKey();
+                        }
+                    }
+
+                    if(attackHit)
+                    {
+                        //input into database the hit was successful
+                    }
+                    else
+                    {
+                        //input into database the hit was a miss
+                    }    
+                    Console.ReadKey();
+                }
+
+            } while (!game.Complete);
         }
 
         //Will repeatedly display the menu to the user, until they select the quit option
