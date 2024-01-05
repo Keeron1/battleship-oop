@@ -428,6 +428,7 @@ namespace Battleship_PresentationLayer
         private void LaunchAttackUI()
         {
             Console.WriteLine("Launch Attack");
+
         }
 
         //Will repeatedly display the menu to the user, until they select the quit option

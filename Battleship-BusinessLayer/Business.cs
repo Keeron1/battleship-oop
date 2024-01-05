@@ -141,6 +141,20 @@ namespace Battleship_BusinessLayer
             }
             return 0;
         }
+        public void CreateAttack(string coord, bool hit, int gameFK)
+        {
+            dt.CreateAttack(coord, hit, gameFK);
+        }
 
+        //need to create playerfk 
+        public IQueryable<Attacks> GetAttacks(int gameFK, string coord)
+        {
+            IQueryable<Attacks> atk = dt.GetAttacks(gameFK, coord);
+            if (atk != null)
+            {
+                return atk;
+            }
+            return null;
+        }
     }
 }

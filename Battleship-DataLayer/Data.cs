@@ -91,6 +91,17 @@ namespace Battleship_DataLayer
             db.SaveChanges();
         }
 
+        public void CreateAttack(string coord, bool hit, int gameFK)
+        {
+            Attacks atk = new Attacks(coord, hit, gameFK);
+            db.Attacks.Add(atk);
+            db.SaveChanges();
+        }
+        public IQueryable<Attacks> GetAttacks(int gameFK, string coord)
+        {
+            var result = from atk in db.Attacks where atk.GameFK == gameFK && atk.Coordinate == coord select atk;
+            return result;
+        }
     }
 
     partial class Players
@@ -131,6 +142,24 @@ namespace Battleship_DataLayer
             this.GameFk = gameFK; 
             this.ShipFK = shipFK;
             this.Coordinate = coord;
+        }
+    }
+
+    partial class Attacks
+    {
+        public Attacks() { }
+        public Attacks(string Coordinate, bool Hit, int GameFK)
+        {
+            this.Coordinate = Coordinate;
+            this.Hit = Hit;
+            this.GameFK = GameFK;
+        }
+        public Attacks(int ID,string Coordinate, bool Hit, int GameFK)
+        {
+            this.ID = ID;
+            this.Coordinate = Coordinate;
+            this.Hit = Hit;
+            this.GameFK = GameFK;
         }
     }
 }
