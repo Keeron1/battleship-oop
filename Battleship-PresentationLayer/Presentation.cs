@@ -174,8 +174,6 @@ namespace Battleship_PresentationLayer
                     {
                         if (shipCoord == GridYaxis[c].ToString() + r) //checks if the position selected is a real grid position
                         {
-                            Console.WriteLine("yes");
-
                             //checking all the ships
                             IQueryable gscShips = business.GetGameShipConfig(gameID, pUsername);
                             if (gscShips != null)
@@ -192,7 +190,7 @@ namespace Battleship_PresentationLayer
                             }
 
                             tempShipSize++;
-                            shipCoords.Add(GridYaxis[c].ToString() + r); //appends the ship coordinate to an array
+                            shipCoords.Add(shipCoord); //appends the ship coordinate to an array
 
                             //generates the next coordinate to be checked
                             if (horizontal) //horizontal starts counting from the left
@@ -201,7 +199,14 @@ namespace Battleship_PresentationLayer
                             }
                             else //vertical starts counting from the top
                             {
-                                shipCoord = GridYaxis[c + 1].ToString() + r;
+                                if (c+1 == GridYaxis.Length) //precaution for when the user chooses to place on the bottom row
+                                {
+                                    shipCoord = GridYaxis[c].ToString() + r;
+                                }
+                                else
+                                {
+                                    shipCoord = GridYaxis[c + 1].ToString() + r;
+                                }
                             }
                         }
                     }
@@ -227,8 +232,6 @@ namespace Battleship_PresentationLayer
         {
             if (menuOptsEnabled[1])//display the type of grid with the player's ships
             {
-                //query to get where the ships are
-
                 IQueryable gscShips = business.GetGameShipConfig(gameID, pUsername);
 
                 Console.WriteLine("  | 1 2 3 4 5 6 7 8");
