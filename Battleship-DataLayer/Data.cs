@@ -47,7 +47,7 @@ namespace Battleship_DataLayer
             db.SaveChanges();
         }
 
-        public IQueryable<Games> GetGameUsername(string creatorFK, string opponentFK)
+        public IQueryable<Games> GetGame(string creatorFK, string opponentFK)
         {
             var result = from game in db.Games where game.CreatorFK == creatorFK && game.OpponentFK == opponentFK select game;
             if (result.Count() > 0)
@@ -55,18 +55,11 @@ namespace Battleship_DataLayer
                 return result;
             }
             return null;
-            
         }
 
         public IQueryable<Ships> GetShips()
         {
             var result = from ship in db.Ships select ship;
-            return result;
-        }
-
-        public IQueryable<Ships> GetShipsID(int id)
-        {
-            var result = from ship in db.Ships where ship.ID == id select ship;
             return result;
         }
 
@@ -99,7 +92,13 @@ namespace Battleship_DataLayer
         }
         public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK)
         {
-            var result = from atk in db.Attacks where atk.GameFK == gameFK select atk;
+            var result = from atk in db.Attacks where atk.GameFK == gameFK && atk.PlayerFK == playerFK select atk;
+            return result;
+        }
+
+        public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK, bool hit) //will either retrive attacks that are a hit or a miss
+        {
+            var result = from atk in db.Attacks where atk.GameFK == gameFK && atk.PlayerFK == playerFK && atk.Hit == hit select atk;
             return result;
         }
 
@@ -109,8 +108,13 @@ namespace Battleship_DataLayer
             return result;
         }
 
-    }
+        public void SetGameComplete(Games game)
+        {
+            game.Complete = true;
+            db.SaveChanges();
+        }
 
+    }
     partial class Players
     {
         public Players(string Username, string Password)
@@ -143,10 +147,10 @@ namespace Battleship_DataLayer
     partial class GameShipConfigurations
     {
         public GameShipConfigurations() { }
-        public GameShipConfigurations(string playerFK, int gameFK, int shipFK, string coord) 
+        public GameShipConfigurations(string playerFK, int gameFK, int shipFK, string coord)
         {
             this.PlayerFK = playerFK;
-            this.GameFk = gameFK; 
+            this.GameFk = gameFK;
             this.ShipFK = shipFK;
             this.Coordinate = coord;
         }
@@ -162,7 +166,7 @@ namespace Battleship_DataLayer
             this.GameFK = GameFK;
             this.PlayerFK = playerFk;
         }
-        public Attacks(int ID,string Coordinate, bool Hit, int GameFK, string playerFK)
+        public Attacks(int ID, string Coordinate, bool Hit, int GameFK, string playerFK)
         {
             this.ID = ID;
             this.Coordinate = Coordinate;
@@ -171,4 +175,5 @@ namespace Battleship_DataLayer
             this.PlayerFK = playerFK;
         }
     }
+
 }

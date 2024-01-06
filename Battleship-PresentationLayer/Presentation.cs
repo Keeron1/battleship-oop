@@ -384,7 +384,7 @@ namespace Battleship_PresentationLayer
         private void ConfigShipsUI()
         {
             GameShips = business.GetShips();
-            Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username); //current game between both players
+            Games game = business.GetActiveGame(players[0].Username, players[1].Username); //current game between both players
 
             for (int p=0; p<2; p++)
             {
@@ -462,39 +462,63 @@ namespace Battleship_PresentationLayer
         //menu3
         private void LaunchAttackUI()
         {
-            Games game = business.GetActiveGameUsername(players[0].Username, players[1].Username); //current game between both players
+            Games game = business.GetActiveGame(players[0].Username, players[1].Username); //current game between both players
             do
             {
                 for (int p=0; p<players.Count(); p++)
                 {
                     bool attackHit = false;
+                    bool plrWin = false;
                     IQueryable<GameShipConfigurations> opponentShips = business.GetOpponentShips(game.ID, players[p].Username);
 
-                    PrintGrid(game.ID, players[p].Username);
-                    Console.WriteLine();
-                    Console.WriteLine($"{players[p].Username}'s turn:");
-                    Console.WriteLine("Where would you like to attack?");
-                    string userCoord = Console.ReadLine().ToUpper();
-
-                    foreach (GameShipConfigurations opponent in opponentShips)
-                    {//loops through the enemy's ship's coordinates
-                        if (opponent.Coordinate == userCoord)
+                    Console.Clear();
+                    foreach (Players plrs in players)
+                    {
+                        IQueryable<Attacks> hitAttacks = business.GetAttacks(game.ID, plrs.Username, true);
+                        if (hitAttacks.Count() >= 17) //if hits are the same then the player has won the game
                         {
-                            attackHit = true;
-                            Console.WriteLine("Great shot!");
-                            Console.WriteLine($"Ship has been found at {userCoord}");
-                            Console.ReadKey();
+                            business.SetGameComplete(game);
+                            Console.WriteLine($"{players[p].Username} has won!!!");
+                            plrWin = true;
+                            menuOptsEnabled[0] = true; //enables the choose players menu option
+                            menuOptsEnabled[2] = false; //disables the attack menu option
+                            break;
                         }
                     }
 
-                    if(attackHit)
+                    if(!plrWin)
                     {
-                        //input into database the hit was successful
+                        break;
                     }
                     else
                     {
-                        //input into database the hit was a miss
-                    }    
+                        PrintGrid(game.ID, players[p].Username);
+                        Console.WriteLine();
+                        Console.WriteLine($"{players[p].Username}'s turn:");
+                        Console.WriteLine("Where would you like to attack?");
+                        string userCoord = Console.ReadLine().ToUpper();
+
+                        foreach (GameShipConfigurations opponent in opponentShips)
+                        {//loops through the enemy's ship's coordinates
+                            if (opponent.Coordinate == userCoord)
+                            {
+                                attackHit = true;
+                            }
+                        }
+
+                        if (attackHit) //input into database the hit was successful
+                        {
+                            business.CreateAttack(userCoord, true, game.ID, players[p].Username);
+                            Console.WriteLine("Great shot!");
+                            Console.WriteLine($"Ship has been found at {userCoord}");
+                        }
+                        else
+                        {
+                            business.CreateAttack(userCoord, false, game.ID, players[p].Username);
+                            Console.WriteLine("Shot missed!");
+                            Console.WriteLine($"Coord: {userCoord} is empty");
+                        }
+                    }
                     Console.ReadKey();
                 }
 
@@ -535,10 +559,6 @@ namespace Battleship_PresentationLayer
                         case 4: // Quit
                             Console.WriteLine("Goodbye...");
                             Environment.Exit(0);
-                            break;
-                        case 5:
-                            Console.WriteLine("testing: ");
-
                             break;
                         default:
                             Console.WriteLine("Incorrect Input!");

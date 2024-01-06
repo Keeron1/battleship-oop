@@ -71,7 +71,7 @@ namespace Battleship_BusinessLayer
         //checks if there is an active match between player 1 and player 2
         public bool AreGamesCompleteUsername(string creatorFK, string opponentFK) //using the usernames to check
         {
-            IQueryable<Games> games = dt.GetGameUsername(creatorFK, opponentFK);
+            IQueryable<Games> games = dt.GetGame(creatorFK, opponentFK);
             if(games == null)
             {
                 return true;
@@ -89,9 +89,9 @@ namespace Battleship_BusinessLayer
             return true;
         }
         //gets the current active match between player 1 and player 2
-        public Games GetActiveGameUsername(string creatorFK, string opponentFK) //using usernames to check
+        public Games GetActiveGame(string creatorFK, string opponentFK) //using usernames to check
         {
-            IQueryable<Games> games = dt.GetGameUsername(creatorFK, opponentFK);
+            IQueryable<Games> games = dt.GetGame(creatorFK, opponentFK);
             if (games == null)
             {
                 return null;
@@ -156,6 +156,16 @@ namespace Battleship_BusinessLayer
             return null;
         }
 
+        public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK, bool hit)
+        {
+            IQueryable<Attacks> atk = dt.GetAttacks(gameFK, playerFK, hit);
+            if (atk != null)
+            {
+                return atk;
+            }
+            return null;
+        }
+
         public IQueryable<GameShipConfigurations> GetOpponentShips(int gameFK, string playerFK)
         {
             IQueryable<GameShipConfigurations> gsc = dt.GetOpponentShips(gameFK, playerFK);
@@ -164,6 +174,11 @@ namespace Battleship_BusinessLayer
                 return gsc;
             }
             return null;
+        }
+
+        public void SetGameComplete(Games game)
+        {
+            dt.SetGameComplete(game);
         }
     }
 }
