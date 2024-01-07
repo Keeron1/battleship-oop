@@ -147,13 +147,15 @@ namespace Battleship_PresentationLayer
             return horizontal;
         }
 
-        private bool AskPlaceShipCoordPlacement(string pUsername, bool horizontal, Ships ship, int gameID)
+        private bool AskPlaceShipCoordPlacement(string pUsername, bool horizontal, Ships ship, int gameID, IQueryable<GameShipConfigurations> gscShips)
         {
             List<string> shipCoords = new List<string>(); //used to store all the coordinates of the ship that is to be placed
             string shipCoord; //stores the original position the user chose
 
             Console.Clear();
-            PrintGrid(gameID, pUsername);
+
+            GameScreen gs = new GameScreen(gscShips.ToList());
+            gs.PrintGrid();
             Console.WriteLine();
 
             Console.WriteLine($"{pUsername}'s turn:");
@@ -175,7 +177,6 @@ namespace Battleship_PresentationLayer
                         if (shipCoord == GridYaxis[c].ToString() + r) //checks if the position selected is a real grid position
                         {
                             //checking all the ships
-                            IQueryable gscShips = business.GetGameShipConfig(gameID, pUsername);
                             if (gscShips != null)
                             {
                                 foreach (GameShipConfigurations gsc in gscShips)
@@ -226,82 +227,6 @@ namespace Battleship_PresentationLayer
             Console.WriteLine("Incorrect position!");
             Console.ReadKey();
             return false;
-        }
-
-        private void PrintGrid(int gameID, string pUsername)
-        {
-            if (menuOptsEnabled[1])//display the type of grid with the player's ships
-            {
-                IQueryable gscShips = business.GetGameShipConfig(gameID, pUsername);
-
-                Console.WriteLine("  | 1 2 3 4 5 6 7 8");
-                Console.WriteLine("--|----------------");
-                for (int c = 1; c <= GridYaxis.Length; c++) //grid is 8 by 7
-                {
-                    Console.Write(GridYaxis[c-1] + " | ");
-                    for (int r = 1; r < 9; r++)
-                    {
-                        bool foundShipCoord = false;
-                        if (gscShips != null)
-                        {
-                            foreach (GameShipConfigurations gsc in gscShips)
-                            {
-                                if (gsc.Coordinate == GridYaxis[c-1].ToString() + r)
-                                {
-                                    Console.Write("S ");
-                                    foundShipCoord = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if(!foundShipCoord)
-                        {
-                            Console.Write("G "); // G for grid
-                        }
-                    }
-                    Console.WriteLine(); //moves onto the next row
-                }
-            }
-            else
-            {
-                IQueryable<Attacks> atks = business.GetAttacks(gameID, pUsername);
-
-                Console.WriteLine("  | 1 2 3 4 5 6 7 8");
-                Console.WriteLine("--|----------------");
-                for (int c = 1; c <= GridYaxis.Length; c++) //grid is 8 by 7
-                {
-                    Console.Write(GridYaxis[c - 1] + " | ");
-                    for (int r = 1; r < 9; r++)
-                    {
-                        bool foundHitCoord = false;
-                        if(atks != null)
-                        {
-                            foreach(Attacks atk in atks)
-                            {   //searches through the grid to find the same coordinate as the atk coordinate
-                                if(atk.Coordinate == GridYaxis[c - 1].ToString() + r) 
-                                {
-                                    if (atk.Hit) //if the attack was a hit
-                                    {
-                                        Console.Write("X ");
-                                    }
-                                    else
-                                    {
-                                        Console.Write("O ");
-                                    }
-                                    foundHitCoord = true;
-                                }
-                            }
-                        }
-
-                        if (!foundHitCoord) //if coordinate wasn't attacked
-                        {
-                            Console.Write("G "); // G for grid
-                        }
-                    }
-                    Console.WriteLine(); //moves onto the next row
-                }
-            }
         }
 
         //menu 1
@@ -389,7 +314,8 @@ namespace Battleship_PresentationLayer
             for (int p=0; p<2; p++)
             {
                 int y = 0;
-                IQueryable<GameShipConfigurations> gscShips = business.GetGameShipConfig(game.ID, players[p].Username).Distinct();
+                IQueryable<GameShipConfigurations> gscShips = business.GetGameShipConfig(game.ID, players[p].Username);
+                IQueryable<GameShipConfigurations> gscShipsDistinct = gscShips.Distinct();
                 int gscUnique = business.GetUniqueGameShips(game.ID, players[p].Username);
 
                 if (gscUnique > 0) //some ships have already been placed
@@ -408,14 +334,15 @@ namespace Battleship_PresentationLayer
                     bool horizontal; //whether the user selected for the ship to be placed horizontally or vertically
 
                     Console.Clear();
-                    PrintGrid(game.ID, players[p].Username);
+                    GameScreen gs = new GameScreen(gscShips.ToList());
+                    gs.PrintGrid();
                     Console.WriteLine();
                     Console.WriteLine($"{players[p].Username}'s turn:");
 
                     foreach (Ships s in GameShips)
                     {
                         bool hasBeenPlaced = false;
-                        foreach(GameShipConfigurations gsc in gscShips)
+                        foreach(GameShipConfigurations gsc in gscShipsDistinct)
                         {
                             if(gsc.ShipFK == s.ID)
                             {
@@ -433,7 +360,7 @@ namespace Battleship_PresentationLayer
                     bool shipSuccessfullySelected = false;
                     do //asks the user which ship they would like to select by choosing the ship id
                     {
-                        Ships tempShip = AskUserShipId(gscShips);
+                        Ships tempShip = AskUserShipId(gscShipsDistinct);
                         if (tempShip != null)
                         {
                             ship = tempShip;
@@ -449,7 +376,7 @@ namespace Battleship_PresentationLayer
                     bool shipSuccessfullyPlaced = false;
                     do //inf loop so that the user can choose a grid position even if they mess up
                     {
-                        shipSuccessfullyPlaced = AskPlaceShipCoordPlacement(players[p].Username, horizontal, ship, game.ID);
+                        shipSuccessfullyPlaced = AskPlaceShipCoordPlacement(players[p].Username, horizontal, ship, game.ID, gscShips);
                     } while (!shipSuccessfullyPlaced);
                     y++;
                 }
@@ -478,7 +405,7 @@ namespace Battleship_PresentationLayer
                         if (hitAttacks.Count() >= 17) //if hits are the same then the player has won the game
                         {
                             business.SetGameComplete(game);
-                            Console.WriteLine($"{players[p].Username} has won!!!");
+                            Console.WriteLine($"{plrs.Username} has won!!!");
                             plrWin = true;
                             menuOptsEnabled[0] = true; //enables the choose players menu option
                             menuOptsEnabled[2] = false; //disables the attack menu option
@@ -486,24 +413,48 @@ namespace Battleship_PresentationLayer
                         }
                     }
 
-                    if(!plrWin)
+                    if(plrWin)
                     {
                         break;
                     }
                     else
                     {
-                        PrintGrid(game.ID, players[p].Username);
+                        IQueryable<Attacks> atks = business.GetAttacks(game.ID, players[p].Username);
+
+                        GameScreen gameScreen = new GameScreen(atks.ToList());
+                        gameScreen.PrintGrid();
+
                         Console.WriteLine();
                         Console.WriteLine($"{players[p].Username}'s turn:");
                         Console.WriteLine("Where would you like to attack?");
                         string userCoord = Console.ReadLine().ToUpper();
 
+                        /*
+                         * Didn't want to add coordinate validation so that if the user isn't careful he gets punished by having a wasted round
+                         */
+
+                        bool atkAlrHit = false;
                         foreach (GameShipConfigurations opponent in opponentShips)
                         {//loops through the enemy's ship's coordinates
                             if (opponent.Coordinate == userCoord)
                             {
                                 attackHit = true;
+                                foreach (Attacks atk in atks)
+                                {
+                                    if (atk.Coordinate == userCoord)
+                                    {
+                                        atkAlrHit = true;
+                                        break;
+                                    }
+                                }
                             }
+                        }
+                        
+                        if(atkAlrHit)
+                        {
+                            Console.WriteLine("This position has already been shot at!");
+                            Console.ReadKey();
+                            continue;
                         }
 
                         if (attackHit) //input into database the hit was successful
@@ -516,7 +467,6 @@ namespace Battleship_PresentationLayer
                         {
                             business.CreateAttack(userCoord, false, game.ID, players[p].Username);
                             Console.WriteLine("Shot missed!");
-                            Console.WriteLine($"Coord: {userCoord} is empty");
                         }
                     }
                     Console.ReadKey();
@@ -574,4 +524,97 @@ namespace Battleship_PresentationLayer
             }
         }
     }
+
+    public class GameScreen
+    {
+        List<Cell> cells { get; set; } = new List<Cell>();
+
+        public GameScreen(List<Cell> cells)
+        {
+            this.cells = cells;
+        }
+
+        public GameScreen(List<Attacks> atkCells)
+        {
+            //convert the list attacks to AttackCells
+            foreach (Attacks atk in atkCells)
+            {
+                AttackCell atkCell = new AttackCell();
+                atkCell.hit = atk.Hit;
+                atkCell.GridCellNo = atk.Coordinate;
+                this.cells.Add(atkCell);
+            }
+        }
+
+        public GameScreen(List<GameShipConfigurations> shipCells)
+        {
+            //convert the list gameshipconfigs to ShipCell
+            foreach (GameShipConfigurations gsc in shipCells)
+            {
+                ShipCell shipCell = new ShipCell();
+                shipCell.GridCellNo = gsc.Coordinate;
+                this.cells.Add(shipCell);
+            }
+        }
+
+        public void PrintGrid()
+        {
+            char[] GridYaxis = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
+
+            Console.WriteLine("  | 1 2 3 4 5 6 7 8");
+            Console.WriteLine("--|----------------");
+            for (int c = 1; c <= GridYaxis.Length; c++) //grid is 8 by 7
+            {
+                Console.Write(GridYaxis[c - 1] + " | ");
+                for (int r = 1; r < 9; r++)
+                {
+                    bool found = false;
+                    foreach(Cell cell in cells)
+                    {
+                        if (cell.GridCellNo == GridYaxis[c - 1].ToString() + r)
+                        {
+                            cell.PrintCell();
+                            found = true;
+                            break;
+                        }
+                        
+                    }
+                    if (found)
+                    {
+                        continue;
+                    }
+                    Console.Write("G "); // G for grid
+                        
+                }
+                Console.WriteLine(); //moves onto the next row
+            }
+        }
+    }
+
+    public abstract class Cell
+    {
+        public string GridCellNo { get; set; }
+        public abstract void PrintCell();
+    }
+
+    public class ShipCell : Cell 
+    {
+        
+        public override void PrintCell() 
+        {
+            Console.Write("S ");
+        }
+    }
+
+    public class AttackCell : Cell
+    {
+        public bool hit { get; set; } = false;
+
+        public override void PrintCell()
+        {
+            if (hit) Console.Write("X ");
+            else Console.Write("O ");
+        }
+    }
+
 }

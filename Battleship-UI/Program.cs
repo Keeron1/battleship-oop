@@ -23,10 +23,7 @@ namespace Battleship_UI
         static void Main(string[] args)
         {
             Presentation pt = new Presentation();
-
             pt.Menu();
-
         }
-
     }
 }

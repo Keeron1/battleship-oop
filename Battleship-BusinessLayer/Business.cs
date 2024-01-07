@@ -130,7 +130,7 @@ namespace Battleship_BusinessLayer
         }
         public int GetUniqueGameShips(int gameFK, string playerFK)
         {
-            IQueryable<int> gsc = dt.GetUniqueGameShips(gameFK, playerFK).Distinct();
+            IQueryable<int> gsc = dt.GetUniqueGameShips(gameFK, playerFK);
             if (gsc != null)
             {
                 foreach(int i in gsc) //running the query
