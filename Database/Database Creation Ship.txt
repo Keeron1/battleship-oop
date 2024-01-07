@@ -1,0 +1,265 @@
+
+-- --------------------------------------------------
+-- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
+-- --------------------------------------------------
+-- Date Created: 01/07/2024 02:25:39
+-- Generated from EDMX file: E:\Github\battleship-mcast-oop\Battleship\Battleship-DataLayer\BattleshipModel.edmx
+-- --------------------------------------------------
+
+SET QUOTED_IDENTIFIER OFF;
+GO
+USE [BattleshipDatabase];
+GO
+IF SCHEMA_ID(N'dbo') IS NULL EXECUTE(N'CREATE SCHEMA [dbo]');
+GO
+
+-- --------------------------------------------------
+-- Dropping existing FOREIGN KEY constraints
+-- --------------------------------------------------
+
+IF OBJECT_ID(N'[dbo].[FK_Games_Attacks]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Attacks] DROP CONSTRAINT [FK_Games_Attacks];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Games_GameShipConfigurations]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GameShipConfigurations] DROP CONSTRAINT [FK_Games_GameShipConfigurations];
+GO
+IF OBJECT_ID(N'[dbo].[FK_GameShipConfigurations_Ships]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GameShipConfigurations] DROP CONSTRAINT [FK_GameShipConfigurations_Ships];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Players_Attacks]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Attacks] DROP CONSTRAINT [FK_Players_Attacks];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Players_Games_Creator]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Games] DROP CONSTRAINT [FK_Players_Games_Creator];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Players_Games_Opponent]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[Games] DROP CONSTRAINT [FK_Players_Games_Opponent];
+GO
+IF OBJECT_ID(N'[dbo].[FK_Players_GameShipConfigurations]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[GameShipConfigurations] DROP CONSTRAINT [FK_Players_GameShipConfigurations];
+GO
+
+-- --------------------------------------------------
+-- Dropping existing tables
+-- --------------------------------------------------
+
+IF OBJECT_ID(N'[dbo].[Attacks]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Attacks];
+GO
+IF OBJECT_ID(N'[dbo].[Games]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Games];
+GO
+IF OBJECT_ID(N'[dbo].[GameShipConfigurations]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[GameShipConfigurations];
+GO
+IF OBJECT_ID(N'[dbo].[Players]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Players];
+GO
+IF OBJECT_ID(N'[dbo].[Ships]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[Ships];
+GO
+
+-- --------------------------------------------------
+-- Creating all tables
+-- --------------------------------------------------
+
+-- Creating table 'Attacks'
+CREATE TABLE [dbo].[Attacks] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [Coordinate] nvarchar(50)  NOT NULL,
+    [Hit] bit  NOT NULL,
+    [GameFK] int  NOT NULL,
+    [PlayerFK] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'Games'
+CREATE TABLE [dbo].[Games] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [Title] nvarchar(50)  NOT NULL,
+    [CreatorFK] nvarchar(50)  NOT NULL,
+    [OpponentFK] nvarchar(50)  NOT NULL,
+    [Complete] bit  NOT NULL
+);
+GO
+
+-- Creating table 'GameShipConfigurations'
+CREATE TABLE [dbo].[GameShipConfigurations] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [PlayerFK] nvarchar(50)  NOT NULL,
+    [GameFk] int  NOT NULL,
+    [Coordinate] nvarchar(50)  NOT NULL,
+    [ShipFK] int  NOT NULL
+);
+GO
+
+-- Creating table 'Players'
+CREATE TABLE [dbo].[Players] (
+    [Username] nvarchar(50)  NOT NULL,
+    [Password] nvarchar(50)  NOT NULL
+);
+GO
+
+-- Creating table 'Ships'
+CREATE TABLE [dbo].[Ships] (
+    [ID] int IDENTITY(1,1) NOT NULL,
+    [Title] nvarchar(50)  NOT NULL,
+    [Size] int  NOT NULL
+);
+GO
+
+-- --------------------------------------------------
+-- Creating all PRIMARY KEY constraints
+-- --------------------------------------------------
+
+-- Creating primary key on [ID] in table 'Attacks'
+ALTER TABLE [dbo].[Attacks]
+ADD CONSTRAINT [PK_Attacks]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'Games'
+ALTER TABLE [dbo].[Games]
+ADD CONSTRAINT [PK_Games]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'GameShipConfigurations'
+ALTER TABLE [dbo].[GameShipConfigurations]
+ADD CONSTRAINT [PK_GameShipConfigurations]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- Creating primary key on [Username] in table 'Players'
+ALTER TABLE [dbo].[Players]
+ADD CONSTRAINT [PK_Players]
+    PRIMARY KEY CLUSTERED ([Username] ASC);
+GO
+
+-- Creating primary key on [ID] in table 'Ships'
+ALTER TABLE [dbo].[Ships]
+ADD CONSTRAINT [PK_Ships]
+    PRIMARY KEY CLUSTERED ([ID] ASC);
+GO
+
+-- --------------------------------------------------
+-- Creating all FOREIGN KEY constraints
+-- --------------------------------------------------
+
+-- Creating foreign key on [GameFK] in table 'Attacks'
+ALTER TABLE [dbo].[Attacks]
+ADD CONSTRAINT [FK_Games_Attacks]
+    FOREIGN KEY ([GameFK])
+    REFERENCES [dbo].[Games]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Games_Attacks'
+CREATE INDEX [IX_FK_Games_Attacks]
+ON [dbo].[Attacks]
+    ([GameFK]);
+GO
+
+-- Creating foreign key on [GameFk] in table 'GameShipConfigurations'
+ALTER TABLE [dbo].[GameShipConfigurations]
+ADD CONSTRAINT [FK_Games_GameShipConfigurations]
+    FOREIGN KEY ([GameFk])
+    REFERENCES [dbo].[Games]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Games_GameShipConfigurations'
+CREATE INDEX [IX_FK_Games_GameShipConfigurations]
+ON [dbo].[GameShipConfigurations]
+    ([GameFk]);
+GO
+
+-- Creating foreign key on [CreatorFK] in table 'Games'
+ALTER TABLE [dbo].[Games]
+ADD CONSTRAINT [FK_Players_Games_Creator]
+    FOREIGN KEY ([CreatorFK])
+    REFERENCES [dbo].[Players]
+        ([Username])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Players_Games_Creator'
+CREATE INDEX [IX_FK_Players_Games_Creator]
+ON [dbo].[Games]
+    ([CreatorFK]);
+GO
+
+-- Creating foreign key on [OpponentFK] in table 'Games'
+ALTER TABLE [dbo].[Games]
+ADD CONSTRAINT [FK_Players_Games_Opponent]
+    FOREIGN KEY ([OpponentFK])
+    REFERENCES [dbo].[Players]
+        ([Username])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Players_Games_Opponent'
+CREATE INDEX [IX_FK_Players_Games_Opponent]
+ON [dbo].[Games]
+    ([OpponentFK]);
+GO
+
+-- Creating foreign key on [PlayerFK] in table 'GameShipConfigurations'
+ALTER TABLE [dbo].[GameShipConfigurations]
+ADD CONSTRAINT [FK_Players_GameShipConfigurations]
+    FOREIGN KEY ([PlayerFK])
+    REFERENCES [dbo].[Players]
+        ([Username])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Players_GameShipConfigurations'
+CREATE INDEX [IX_FK_Players_GameShipConfigurations]
+ON [dbo].[GameShipConfigurations]
+    ([PlayerFK]);
+GO
+
+-- Creating foreign key on [ShipFK] in table 'GameShipConfigurations'
+ALTER TABLE [dbo].[GameShipConfigurations]
+ADD CONSTRAINT [FK_GameShipConfigurations_Ships]
+    FOREIGN KEY ([ShipFK])
+    REFERENCES [dbo].[Ships]
+        ([ID])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_GameShipConfigurations_Ships'
+CREATE INDEX [IX_FK_GameShipConfigurations_Ships]
+ON [dbo].[GameShipConfigurations]
+    ([ShipFK]);
+GO
+
+-- Creating foreign key on [PlayerFK] in table 'Attacks'
+ALTER TABLE [dbo].[Attacks]
+ADD CONSTRAINT [FK_Players_Attacks]
+    FOREIGN KEY ([PlayerFK])
+    REFERENCES [dbo].[Players]
+        ([Username])
+    ON DELETE NO ACTION ON UPDATE NO ACTION;
+GO
+
+-- Creating non-clustered index for FOREIGN KEY 'FK_Players_Attacks'
+CREATE INDEX [IX_FK_Players_Attacks]
+ON [dbo].[Attacks]
+    ([PlayerFK]);
+GO
+
+-- --------------------------------------------------
+-- Script has ended
+-- --------------------------------------------------
+
+INSERT INTO Ships
+(Title, Size)
+VALUES
+('Carrier',5),
+('Battleship',4),
+('Cruiser',3),
+('Submarine',3),
+('Destroyer',2)
