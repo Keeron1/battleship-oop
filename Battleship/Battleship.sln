@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship-DataLayer", "Bat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Battleship-BusinessLayer", "Battleship-BusinessLayer\Battleship-BusinessLayer.csproj", "{549456EB-F35C-4BE9-8CCE-A50F032C1804}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "PresentationLayer\PresentationLayer.csproj", "{1861E83E-FFAA-4C66-8675-4E5A67AF2565}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{549456EB-F35C-4BE9-8CCE-A50F032C1804}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{549456EB-F35C-4BE9-8CCE-A50F032C1804}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{549456EB-F35C-4BE9-8CCE-A50F032C1804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1861E83E-FFAA-4C66-8675-4E5A67AF2565}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1861E83E-FFAA-4C66-8675-4E5A67AF2565}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1861E83E-FFAA-4C66-8675-4E5A67AF2565}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1861E83E-FFAA-4C66-8675-4E5A67AF2565}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

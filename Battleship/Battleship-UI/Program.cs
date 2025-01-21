@@ -1,14 +1,9 @@
 ﻿using Battleship_PresentationLayer;
-using Battleship_DataLayer;
+using PresentationLayer;
+//using Battleship_DataLayer;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Security;
+using System.Windows;
 
 namespace Battleship_UI
 {
@@ -20,10 +15,15 @@ namespace Battleship_UI
          * Data Layer: Database & LINQ CODE
          */
 
+        [STAThread]
         static void Main(string[] args)
         {
-            Presentation pt = new Presentation();
-            pt.Menu();
+            PresentationLayer.MainWindow presentationLayer = new PresentationLayer.MainWindow();
+            Application app = new Application();
+            app.Run(presentationLayer);
+
+            //Presentation pt = new Presentation();
+            //pt.Menu();
         }
     }
 }

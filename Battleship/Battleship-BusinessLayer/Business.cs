@@ -24,9 +24,9 @@ namespace Battleship_BusinessLayer
             return false;
         }
 
-        public bool CheckUserPassword(string password)
+        public bool CheckUserPassword(string username, string password)
         {
-            if (dt.ValidUserPassword(password).Count() > 0)
+            if (dt.ValidUserPassword(username, password).Count() > 0)
             {
                 return true;
             }
@@ -109,9 +109,35 @@ namespace Battleship_BusinessLayer
             return null;
         }
 
-        public IQueryable<Ships> GetShips()
+        public Games GetActiveGame(string creatorFK, string opponentFK, string gameTitle) //using usernames to check
         {
-            return dt.GetShips();
+            IQueryable<Games> game = dt.GetGame(creatorFK, opponentFK, gameTitle);
+            return game.FirstOrDefault(); // returns the game or null by default
+        }
+
+        public List<Games> GetActiveGames(string creatorFK, string opponentFK) //using usernames to check
+        {
+            IQueryable<Games> games = dt.GetGame(creatorFK, opponentFK);
+            if (games == null)
+            {
+                return null;
+            }
+
+            List<Games> activeGames = new List<Games>();
+            foreach (Games game in games)
+            {
+                if (game.Complete == false)
+                {
+                    activeGames.Add(game);
+                }
+            }
+            if (activeGames.Count > 0) return activeGames;
+            return null;
+        }
+
+        public List<Ships> GetShips()
+        {
+            return dt.GetShips().ToList();
         }
 
         public void CreateNewShipCoord(string playerFK, int gameFK, int shipFK, string coord)
@@ -119,12 +145,12 @@ namespace Battleship_BusinessLayer
             dt.CreateShipCoord(playerFK, gameFK, shipFK, coord);
         }
 
-        public IQueryable<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK)
+        public List<GameShipConfigurations> GetGameShipConfig(int gameFK, string playerFK)
         {
             IQueryable<GameShipConfigurations> gsc = dt.GetGameShipConfig(gameFK, playerFK);
             if (gsc != null)
             {
-                return gsc;
+                return gsc.ToList();
             }
             return null;
         }
@@ -146,32 +172,42 @@ namespace Battleship_BusinessLayer
             dt.CreateAttack(coord, hit, gameFK, playerFK);
         }
 
-        public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK)
+        public List<Attacks> GetAttacks(int gameFK)
+        {
+            IQueryable<Attacks> atk = dt.GetAttacks(gameFK);
+            if (atk != null)
+            {
+                return atk.ToList();
+            }
+            return null;
+        }
+
+        public List<Attacks> GetAttacks(int gameFK, string playerFK)
         {
             IQueryable<Attacks> atk = dt.GetAttacks(gameFK, playerFK);
             if (atk != null)
             {
-                return atk;
+                return atk.ToList();
             }
             return null;
         }
 
-        public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK, bool hit)
+        public List<Attacks> GetAttacks(int gameFK, string playerFK, bool hit)
         {
             IQueryable<Attacks> atk = dt.GetAttacks(gameFK, playerFK, hit);
             if (atk != null)
             {
-                return atk;
+                return atk.ToList();
             }
             return null;
         }
 
-        public IQueryable<GameShipConfigurations> GetOpponentShips(int gameFK, string playerFK)
+        public List<GameShipConfigurations> GetOpponentShips(int gameFK, string playerFK)
         {
             IQueryable<GameShipConfigurations> gsc = dt.GetOpponentShips(gameFK, playerFK);
             if(gsc != null)
             {
-                return gsc;
+                return gsc.ToList();
             }
             return null;
         }
@@ -179,6 +215,16 @@ namespace Battleship_BusinessLayer
         public void SetGameComplete(Games game)
         {
             dt.SetGameComplete(game);
+        }
+
+        public void DeleteShip(int gameFK, string playerFK, int shipFK)
+        {
+            dt.DeleteShip(gameFK, playerFK, shipFK);
+        }
+
+        public void DeleteGame(Games game)
+        {
+            dt.DeleteGame(game);
         }
     }
 }

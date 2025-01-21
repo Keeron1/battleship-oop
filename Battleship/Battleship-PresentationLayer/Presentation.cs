@@ -10,10 +10,11 @@ using System.Threading.Tasks;
 
 namespace Battleship_PresentationLayer
 {
+    // MCAST OOP Home Assignment
     public class Presentation
     {
         private Business business = new Business();
-        private IQueryable<Ships> GameShips { get; set; }
+        private List<Ships> GameShips { get; set; }
         private char[] GridYaxis = { 'A', 'B', 'C', 'D', 'E', 'F', 'G' };
         private bool[] menuOptsEnabled = { true, false, false }; //add players, ship config, attack
 
@@ -83,7 +84,7 @@ namespace Battleship_PresentationLayer
             return pass;
         }
 
-        private Ships AskUserShipId(IQueryable<GameShipConfigurations> gscShips)
+        private Ships AskUserShipId(List<GameShipConfigurations> gscShips)
         {
             Ships ship = new Ships();
             bool shipFound = false;
@@ -147,7 +148,7 @@ namespace Battleship_PresentationLayer
             return horizontal;
         }
 
-        private bool AskPlaceShipCoordPlacement(string pUsername, bool horizontal, Ships ship, int gameID, IQueryable<GameShipConfigurations> gscShips)
+        private bool AskPlaceShipCoordPlacement(string pUsername, bool horizontal, Ships ship, int gameID, List<GameShipConfigurations> gscShips)
         {
             List<string> shipCoords = new List<string>(); //used to store all the coordinates of the ship that is to be placed
             string shipCoord; //stores the original position the user chose
@@ -255,7 +256,7 @@ namespace Battleship_PresentationLayer
                         Console.WriteLine("Input password:");
                         password = MaskPassword();
 
-                        if (business.CheckUserPassword(password))
+                        if (business.CheckUserPassword(username, password))
                         {
                             Console.WriteLine("Logged in");
                             players.Add(business.GetPlayer(username));
@@ -314,8 +315,8 @@ namespace Battleship_PresentationLayer
             for (int p=0; p<2; p++)
             {
                 int y = 0;
-                IQueryable<GameShipConfigurations> gscShips = business.GetGameShipConfig(game.ID, players[p].Username);
-                IQueryable<GameShipConfigurations> gscShipsDistinct = gscShips.Distinct();
+                List<GameShipConfigurations> gscShips = business.GetGameShipConfig(game.ID, players[p].Username);
+                List<GameShipConfigurations> gscShipsDistinct = gscShips.Distinct().ToList();
                 int gscUnique = business.GetUniqueGameShips(game.ID, players[p].Username);
 
                 if (gscUnique > 0) //some ships have already been placed
@@ -396,12 +397,12 @@ namespace Battleship_PresentationLayer
                 {
                     bool attackHit = false;
                     bool plrWin = false;
-                    IQueryable<GameShipConfigurations> opponentShips = business.GetOpponentShips(game.ID, players[p].Username);
+                    List<GameShipConfigurations> opponentShips = business.GetOpponentShips(game.ID, players[p].Username);
 
                     Console.Clear();
                     foreach (Players plrs in players)
                     {
-                        IQueryable<Attacks> hitAttacks = business.GetAttacks(game.ID, plrs.Username, true);
+                        List<Attacks> hitAttacks = business.GetAttacks(game.ID, plrs.Username, true);
                         if (hitAttacks.Count() >= 17) //if hits are the same then the player has won the game
                         {
                             business.SetGameComplete(game);
@@ -419,7 +420,7 @@ namespace Battleship_PresentationLayer
                     }
                     else
                     {
-                        IQueryable<Attacks> atks = business.GetAttacks(game.ID, players[p].Username);
+                        List<Attacks> atks = business.GetAttacks(game.ID, players[p].Username);
 
                         GameScreen gameScreen = new GameScreen(atks.ToList());
                         gameScreen.PrintGrid();

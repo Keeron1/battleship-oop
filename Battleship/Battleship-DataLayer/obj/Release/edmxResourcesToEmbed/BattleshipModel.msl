@@ -4,11 +4,11 @@
     <EntitySetMapping Name="Attacks">
       <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.Attacks)">
         <MappingFragment StoreEntitySet="Attacks">
-          <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />
           <ScalarProperty Name="Hit" ColumnName="Hit" />
           <ScalarProperty Name="GameFK" ColumnName="GameFK" />
+          <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -26,11 +26,11 @@
     <EntitySetMapping Name="GameShipConfigurations">
       <EntityTypeMapping TypeName="IsTypeOf(BattleshipDatabaseModel.GameShipConfigurations)">
         <MappingFragment StoreEntitySet="GameShipConfigurations">
-          <ScalarProperty Name="ShipFK" ColumnName="ShipFK" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="PlayerFK" ColumnName="PlayerFK" />
           <ScalarProperty Name="GameFk" ColumnName="GameFk" />
           <ScalarProperty Name="Coordinate" ColumnName="Coordinate" />
+          <ScalarProperty Name="ShipFK" ColumnName="ShipFK" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

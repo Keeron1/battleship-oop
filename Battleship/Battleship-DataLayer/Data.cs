@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -21,9 +23,9 @@ namespace Battleship_DataLayer
             return result;
         }
 
-        public IQueryable<Players> ValidUserPassword(string password)
+        public IQueryable<Players> ValidUserPassword(string username, string password)
         {
-            var result = from plr in db.Players where plr.Password == password select plr;
+            var result = from plr in db.Players where plr.Password == password && plr.Username == username select plr;
             return result;
         }
 
@@ -50,6 +52,16 @@ namespace Battleship_DataLayer
         public IQueryable<Games> GetGame(string creatorFK, string opponentFK)
         {
             var result = from game in db.Games where game.CreatorFK == creatorFK && game.OpponentFK == opponentFK select game;
+            if (result.Count() > 0)
+            {
+                return result;
+            }
+            return null;
+        }
+
+        public IQueryable<Games> GetGame(string creatorFK, string opponentFK, string gameTitle)
+        {
+            var result = from game in db.Games where game.CreatorFK == creatorFK && game.OpponentFK == opponentFK && game.Title == gameTitle select game;
             if (result.Count() > 0)
             {
                 return result;
@@ -90,12 +102,17 @@ namespace Battleship_DataLayer
             db.Attacks.Add(atk);
             db.SaveChanges();
         }
+        
+        public IQueryable<Attacks> GetAttacks(int gameFK)
+        {
+            var result = from atk in db.Attacks where atk.GameFK == gameFK select atk;
+            return result;
+        }
         public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK)
         {
             var result = from atk in db.Attacks where atk.GameFK == gameFK && atk.PlayerFK == playerFK select atk;
             return result;
         }
-
         public IQueryable<Attacks> GetAttacks(int gameFK, string playerFK, bool hit) //will either retrive attacks that are a hit or a miss
         {
             var result = from atk in db.Attacks where atk.GameFK == gameFK && atk.PlayerFK == playerFK && atk.Hit == hit select atk;
@@ -111,6 +128,33 @@ namespace Battleship_DataLayer
         public void SetGameComplete(Games game)
         {
             game.Complete = true;
+            db.SaveChanges();
+        }
+
+        public void DeleteShip(int gameFK, string playerFK, int shipFK)
+        {
+            var rowsToDelete = db.GameShipConfigurations.Where(gsc => gsc.GameFk == gameFK &&
+                                                               gsc.PlayerFK == playerFK &&
+                                                               gsc.ShipFK == shipFK);
+            if (rowsToDelete.Any())
+            {
+                db.GameShipConfigurations.RemoveRange(rowsToDelete);
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteGame(Games game)
+        {
+            // Remove attacks
+            var attacks = db.Attacks.Where(a => a.GameFK == game.ID).ToList();
+            db.Attacks.RemoveRange(attacks);
+
+            // Remove player's ships
+            var gameShips = db.GameShipConfigurations.Where(gsc => gsc.GameFk == game.ID).ToList();
+            db.GameShipConfigurations.RemoveRange(gameShips);
+
+            // Remove the game
+            db.Games.Remove(game);
             db.SaveChanges();
         }
 

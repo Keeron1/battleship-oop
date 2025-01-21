@@ -26,3 +26,17 @@ C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLay
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.pdb
 C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship-PresentationLayer\bin\Release\Battleship-DataLayer.dll.config
 E:\Github\battleship-mcast-oop\Battleship-PresentationLayer\bin\Release\Battleship-DataLayer.dll.config
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-PresentationLayer.dll
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-PresentationLayer.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-BusinessLayer.dll
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-DataLayer.dll
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\EntityFramework.dll
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-BusinessLayer.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-DataLayer.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\Battleship-DataLayer.dll.config
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\bin\Release\EntityFramework.xml
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.csproj.AssemblyReference.cache
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.csproj.CoreCompileInputs.cache
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.dll
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\obj\Release\Battleship-PresentationLayer.pdb
+C:\Users\Keeron\Documents\GitHub\battleship-mcast-oop\Battleship\Battleship-PresentationLayer\obj\Release\Battlesh.0E904E67.Up2Date
