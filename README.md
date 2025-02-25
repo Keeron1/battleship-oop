@@ -1,4 +1,4 @@
-MCAST Battleship Home Assignment C#
+MCAST & LBTU Battleship Home Assignment C#
 
 1. CREATE THE DATABASE ON SSMS 
 
